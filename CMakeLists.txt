@@ -10,6 +10,9 @@ set(wheel_export_file "${PROJECT_BINARY_DIR}/wheelTargets.cmake")
 
 # Dependencies
 
+set(ZEROMQ_GIT_TAG        v4.3.2)
+#set(CPPZMQ_GIT_TAG        v4.5.0)
+set(CPPZMQ_GIT_TAG        wrap-find-package)
 set(XTL_GIT_TAG          master)
 set(JSON_GIT_TAG          v3.7.3)
 #set(XEUS_GIT_TAG          0.23.3)
@@ -22,6 +25,32 @@ set(XEUS_PYTHON_GIT_TAG   private-exports)
 
 include(FetchContent)
 
+message(STATUS "Fetching libzmq")
+FetchContent_Declare(
+  libzmq
+  GIT_REPOSITORY https://github.com/zeromq/libzmq
+  GIT_TAG ${ZEROMQ_GIT_TAG}
+  CMAKE_ARGS "-DBUILD_TESTS=OFF"
+)
+FetchContent_GetProperties(libzmq)
+if(NOT libzmq_POPULATED)
+  FetchContent_Populate(libzmq)
+  add_subdirectory(${libzmq_SOURCE_DIR} ${libzmq_BINARY_DIR})
+endif()
+
+message(STATUS "Fetching cppzmq")
+FetchContent_Declare(
+  cppzmq
+  GIT_REPOSITORY https://github.com/SylvainCorlay/cppzmq
+  GIT_TAG ${CPPZMQ_GIT_TAG}
+)
+FetchContent_GetProperties(cppzmq)
+if(NOT cppzmq_POPULATED)
+  FetchContent_Populate(cppzmq)
+  add_subdirectory(${cppzmq_SOURCE_DIR} ${cppzmq_BINARY_DIR})
+endif()
+
+set(BUILD_TESTS OFF)
 message(STATUS "Fetching xtl")
 FetchContent_Declare(
   xtl
