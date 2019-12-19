@@ -24,6 +24,12 @@ set(PYBIND11_JSON_GIT_TAG wrap-find-package)
 set(XEUS_PYTHON_GIT_TAG   private-exports)
 
 include(FetchContent)
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
+include(ExternalProject)
+include(ExternalProjectDependency)
+include(ExternalProjectGenerateProjectDescription)
+
+# include(SuperBuild/External_OpenSSL)
 
 message(STATUS "Fetching libzmq")
 FetchContent_Declare(
