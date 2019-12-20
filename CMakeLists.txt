@@ -23,6 +23,34 @@ set(PYBIND11_JSON_GIT_TAG wrap-find-package)
 #set(XEUS_PYTHON_GIT_TAG    0.6.8)
 set(XEUS_PYTHON_GIT_TAG   private-exports)
 
+# First, pre-build non-cmake dependencies
+
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
+
+configure_file(External_zlib.cmake.in zlib-download/CMakeLists.txt @ONLY)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/zlib-download)
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/zlib-download )
+if(result)
+    message(FATAL_ERROR "CMake step for zlib failed: ${result}")
+endif()
+
+configure_file(External_OpenSSL.cmake.in OpenSSL-download/CMakeLists.txt @ONLY)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL-download)
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL-download )
+if(result)
+    message(FATAL_ERROR "CMake step for OpenSSL failed: ${result}")
+endif()
+
+# Then, cmake dependencies with FetchContent
+
 include(FetchContent)
 
 message(STATUS "Fetching libzmq")
