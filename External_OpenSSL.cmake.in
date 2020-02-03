@@ -1,0 +1,37 @@
+cmake_minimum_required(VERSION 2.8.2)
+
+project(OpenSSL-download NONE)
+include(ExternalProject)
+
+set(EP_SOURCE_DIR ${CMAKE_BINARY_DIR}/openssl-src)
+set(EP_BINARY_DIR ${CMAKE_BINARY_DIR}/openssl-src)
+set(EP_INSTALL_DIR ${CMAKE_BINARY_DIR}/openssl-install)
+
+set(openssl_TAG 1.1.1d)
+set(openssl_SHA256 1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2)
+set(openssl_URL "http://www.openssl.org/source/openssl-${openssl_TAG}.tar.gz")
+
+include(ProcessorCount)
+ProcessorCount(CPU_COUNT)
+if(CPU_COUNT EQUAL 0)
+    set(CPU_COUNT 2)
+endif()
+
+ExternalProject_Add(openssl
+    URL ${openssl_URL}
+    URL_HASH SHA256=${openssl_SHA256}
+    SOURCE_DIR ${EP_SOURCE_DIR}
+    BINARY_DIR ${EP_BINARY_DIR}
+    INSTALL_DIR ${EP_INSTALL_DIR}
+    CONFIGURE_COMMAND ./config --prefix=${EP_INSTALL_DIR}
+    BUILD_COMMAND make -j${CPU_COUNT}
+)
+
+set(openssl_DIR ${EP_INSTALL_DIR})
+set(OPENSSL_ROOT ${openssl_DIR})
+set(OPENSSL_INCLUDE_DIR ${openssl_DIR}/include)
+if(WIN32)
+    set(OPENSSL_LIBRARIES ${openssl_DIR}/lib/libssl.lib)
+else()
+    set(OPENSSL_LIBRARIES ${openssl_DIR}/lib/libssl.a)
+endif()
