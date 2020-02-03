@@ -27,29 +27,18 @@ set(XEUS_PYTHON_GIT_TAG   private-exports)
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
 
-configure_file(External_zlib.cmake.in zlib-download/CMakeLists.txt @ONLY)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} .
-                RESULT_VARIABLE result
-                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/zlib-download)
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
-                RESULT_VARIABLE result
-                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/zlib-download )
-if(result)
-    message(FATAL_ERROR "CMake step for zlib failed: ${result}")
-endif()
-
 configure_file(External_OpenSSL.cmake.in OpenSSL-download/CMakeLists.txt @ONLY)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} .
                 RESULT_VARIABLE result
-                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL-download)
+                WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL-download)
+
 execute_process(COMMAND ${CMAKE_COMMAND} --build .
                 RESULT_VARIABLE result
                 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL-download )
 if(result)
     message(FATAL_ERROR "CMake step for OpenSSL failed: ${result}")
 endif()
-
-# Then, cmake dependencies with FetchContent
 
 include(FetchContent)
 
@@ -78,8 +67,8 @@ if(NOT cppzmq_POPULATED)
   add_subdirectory(${cppzmq_SOURCE_DIR} ${cppzmq_BINARY_DIR})
 endif()
 
-set(BUILD_TESTS OFF)
 message(STATUS "Fetching xtl")
+set(BUILD_TESTS OFF)
 FetchContent_Declare(
   xtl
   GIT_REPOSITORY https://github.com/xtensor-stack/xtl
@@ -92,6 +81,7 @@ if(NOT xtl_POPULATED)
 endif()
 
 message(STATUS "Fetching nlohmann_json")
+set(BUILD_TESTING OFF)
 FetchContent_Declare(
   nlohmann_json
   GIT_REPOSITORY https://github.com/nlohmann/json
@@ -116,7 +106,9 @@ if(NOT xeus_POPULATED)
   add_subdirectory(${xeus_SOURCE_DIR} ${xeus_BINARY_DIR})
 endif()
 
+
 message(STATUS "Fetching pybind11")
+set(PYBIND11_TEST OFF)
 FetchContent_Declare(
   pybind11
   GIT_REPOSITORY https://github.com/pybind/pybind11
