@@ -9,26 +9,26 @@ include(GNUInstallDirs) # Define CMAKE_INSTALL_xxx: LIBDIR, INCLUDEDIR
 set(wheel_export_file "${PROJECT_BINARY_DIR}/wheelTargets.cmake")
 
 # Dependencies
+# ============
 
 set(ZEROMQ_GIT_TAG        v4.3.2)
-#set(CPPZMQ_GIT_TAG        v4.5.0)
 set(CPPZMQ_GIT_TAG        wrap-find-package)
 set(XTL_GIT_TAG           0.6.10)
 set(JSON_GIT_TAG          v3.7.3)
-#set(XEUS_GIT_TAG          0.23.3)
 set(XEUS_GIT_TAG          wrap-find-package)
 set(PYBIND11_GIT_TAG       v2.3)
-#set(PYBIND11_JSON_GIT_TAG  0.2.2)
 set(PYBIND11_JSON_GIT_TAG wrap-find-package)
-#set(XEUS_PYTHON_GIT_TAG    0.6.8)
 set(XEUS_PYTHON_GIT_TAG   private-exports)
 
-# First, pre-build non-cmake dependencies
+# pre-build non-cmake dependencies
+# ================================
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
 
 configure_file(External_OpenSSL.cmake.in OpenSSL-download/CMakeLists.txt @ONLY)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} .
+
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} .
                 RESULT_VARIABLE result
                 WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL-download)
@@ -39,6 +39,9 @@ execute_process(COMMAND ${CMAKE_COMMAND} --build .
 if(result)
     message(FATAL_ERROR "CMake step for OpenSSL failed: ${result}")
 endif()
+
+# Fetch and build cmake dependencies
+# ==================================
 
 include(FetchContent)
 
@@ -146,6 +149,8 @@ if(NOT xeus-python_POPULATED)
 endif()
 
 # Install/package
+# ===============
+
 set(install_cmake_dir "${CMAKE_INSTALL_LIBDIR}/cmake/wheel")
 
 include(CMakePackageConfigHelpers)
@@ -155,6 +160,8 @@ write_basic_package_version_file(wheelConfigVersion.cmake
   COMPATIBILITY SameMajorVersion)
 
 # Build tree
+# ==========
+
 set(WHEEL_TARGETS_FILE ${wheel_export_file})
 
 configure_package_config_file(
@@ -167,6 +174,8 @@ configure_package_config_file(
   )
 
 # Install tree
+# ============
+
 set(WHEEL_TARGETS_FILE ${CMAKE_INSTALL_PREFIX}/${install_cmake_dir}/wheelTargets.cmake)
 configure_package_config_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/wheelConfig.cmake.in
