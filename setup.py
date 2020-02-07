@@ -28,4 +28,5 @@ setup(
     packages=[],
     setup_requires=setup_requires,
     #cmake=['-DHELLO_BUILD_TESTING:BOOL=TRUE',]
+    cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib']
 )

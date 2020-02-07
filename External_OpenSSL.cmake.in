@@ -5,7 +5,7 @@ include(ExternalProject)
 
 set(EP_SOURCE_DIR ${CMAKE_BINARY_DIR}/openssl-src)
 set(EP_BINARY_DIR ${CMAKE_BINARY_DIR}/openssl-src)
-set(EP_INSTALL_DIR ${CMAKE_BINARY_DIR}/openssl-install)
+set(EP_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
 
 set(openssl_TAG 1.1.1d)
 set(openssl_SHA256 1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2)
@@ -25,6 +25,7 @@ ExternalProject_Add(openssl
     INSTALL_DIR ${EP_INSTALL_DIR}
     CONFIGURE_COMMAND ./config --prefix=${EP_INSTALL_DIR}
     BUILD_COMMAND make -j${CPU_COUNT}
+    INSTALL_COMMAND make install_sw install_ssldirs
 )
 
 set(openssl_DIR ${EP_INSTALL_DIR})
