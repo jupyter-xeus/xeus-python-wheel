@@ -15,10 +15,10 @@ set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        wrap-find-package)
 set(XTL_GIT_TAG           0.6.10)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          wrap-find-package)
+set(XEUS_GIT_TAG          0.23.4)
 set(PYBIND11_GIT_TAG       v2.3)
-set(PYBIND11_JSON_GIT_TAG wrap-find-package)
-set(XEUS_PYTHON_GIT_TAG   private-exports)
+set(PYBIND11_JSON_GIT_TAG 0.2.4)
+set(XEUS_PYTHON_GIT_TAG   0.6.10)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -100,7 +100,7 @@ endif()
 message(STATUS "Fetching xeus")
 FetchContent_Declare(
   xeus
-  GIT_REPOSITORY https://github.com/SylvainCorlay/xeus
+  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus
   GIT_TAG ${XEUS_GIT_TAG}
 )
 FetchContent_GetProperties(xeus)
@@ -126,8 +126,7 @@ endif()
 message(STATUS "Fetching pybind11_json")
 FetchContent_Declare(
   pybind11_json
-#  GIT_REPOSITORY https://github.com/pybind/pybind11_json
-  GIT_REPOSITORY https://github.com/SylvainCorlay/pybind11_json
+  GIT_REPOSITORY https://github.com/pybind/pybind11_json
   GIT_TAG ${PYBIND11_JSON_GIT_TAG}
 )
 FetchContent_GetProperties(pybind11_json)
@@ -139,7 +138,7 @@ endif()
 message(STATUS "Fetching xeus-python")
 FetchContent_Declare(
   xeus-python
-  GIT_REPOSITORY https://github.com/SylvainCorlay/xeus-python
+  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
 )
 FetchContent_GetProperties(xeus-python)

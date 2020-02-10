@@ -23,7 +23,7 @@ setup(
     name="xeus-python",
     version="0.6.8",
     description='A wheel for xeus-python',
-    author='Sylvain Corlay',
+    author='Sylvain Corlay, Johan Mabille',
     license='',
     packages=[],
     setup_requires=setup_requires,
