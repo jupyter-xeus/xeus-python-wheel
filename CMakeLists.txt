@@ -13,9 +13,9 @@ set(wheel_export_file "${PROJECT_BINARY_DIR}/wheelTargets.cmake")
 
 set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        wrap-find-package)
-set(XTL_GIT_TAG           0.6.10)
+set(XTL_GIT_TAG           0.6.12)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          0.23.4)
+set(XEUS_GIT_TAG          0.23.5)
 set(PYBIND11_GIT_TAG       v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
 set(XEUS_PYTHON_GIT_TAG   0.6.10)
@@ -70,19 +70,6 @@ if(NOT cppzmq_POPULATED)
   add_subdirectory(${cppzmq_SOURCE_DIR} ${cppzmq_BINARY_DIR})
 endif()
 
-message(STATUS "Fetching xtl")
-set(BUILD_TESTS OFF)
-FetchContent_Declare(
-  xtl
-  GIT_REPOSITORY https://github.com/xtensor-stack/xtl
-  GIT_TAG ${XTL_GIT_TAG}
-)
-FetchContent_GetProperties(xtl)
-if(NOT xtl_POPULATED)
-  FetchContent_Populate(xtl)
-  add_subdirectory(${xtl_SOURCE_DIR} ${xtl_BINARY_DIR})
-endif()
-
 message(STATUS "Fetching nlohmann_json")
 set(BUILD_TESTING OFF)
 FetchContent_Declare(
@@ -95,6 +82,19 @@ FetchContent_GetProperties(nlohmann_json)
 if(NOT nlohmann_json_POPULATED)
   FetchContent_Populate(nlohmann_json)
   add_subdirectory(${nlohmann_json_SOURCE_DIR} ${nlohmann_json_BINARY_DIR})
+endif()
+
+message(STATUS "Fetching xtl")
+set(BUILD_TESTS OFF)
+FetchContent_Declare(
+  xtl
+  GIT_REPOSITORY https://github.com/xtensor-stack/xtl
+  GIT_TAG ${XTL_GIT_TAG}
+)
+FetchContent_GetProperties(xtl)
+if(NOT xtl_POPULATED)
+  FetchContent_Populate(xtl)
+  add_subdirectory(${xtl_SOURCE_DIR} ${xtl_BINARY_DIR})
 endif()
 
 message(STATUS "Fetching xeus")
