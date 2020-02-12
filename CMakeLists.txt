@@ -8,6 +8,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(GNUInstallDirs) # Define CMAKE_INSTALL_xxx: LIBDIR, INCLUDEDIR
 set(wheel_export_file "${PROJECT_BINARY_DIR}/wheelTargets.cmake")
 
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
+
 # Dependencies
 # ============
 
@@ -23,21 +25,30 @@ set(XEUS_PYTHON_GIT_TAG   0.6.10)
 # pre-build non-cmake dependencies
 # ================================
 
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
-
 configure_file(External_OpenSSL.cmake.in OpenSSL-download/CMakeLists.txt @ONLY)
-
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} .
                 RESULT_VARIABLE result
                 WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL-download)
-
 execute_process(COMMAND ${CMAKE_COMMAND} --build .
                 RESULT_VARIABLE result
                 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL-download )
 if(result)
     message(FATAL_ERROR "CMake step for OpenSSL failed: ${result}")
+endif()
+
+configure_file(External_libuuid.cmake.in libuuid-download/CMakeLists.txt @ONLY)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}/libuuid-download)
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libuuid-download )
+if(result)
+    message(FATAL_ERROR "CMake step for libuuid failed: ${result}")
 endif()
 
 # Fetch and build cmake dependencies

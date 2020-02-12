@@ -28,11 +28,3 @@ ExternalProject_Add(openssl
     INSTALL_COMMAND make install_sw install_ssldirs
 )
 
-set(openssl_DIR ${EP_INSTALL_DIR})
-set(OPENSSL_ROOT ${openssl_DIR})
-set(OPENSSL_INCLUDE_DIR ${openssl_DIR}/include)
-if(WIN32)
-    set(OPENSSL_LIBRARIES ${openssl_DIR}/lib/libssl.lib)
-else()
-    set(OPENSSL_LIBRARIES ${openssl_DIR}/lib/libssl.a)
-endif()
