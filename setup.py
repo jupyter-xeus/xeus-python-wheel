@@ -19,6 +19,8 @@ except ImportError:
     print('  python -m pip install scikit-build')
     sys.exit(1)
 
+python_path = sys.executable
+
 setup(
     name="xeus-python",
     version="0.6.8",
@@ -28,5 +30,5 @@ setup(
     packages=[],
     setup_requires=setup_requires,
     #cmake=['-DHELLO_BUILD_TESTING:BOOL=TRUE',]
-    cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib']
+    cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH='+python_path]
 )

@@ -10,6 +10,11 @@ set(wheel_export_file "${PROJECT_BINARY_DIR}/wheelTargets.cmake")
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
 
+message(STATUS "PYTHON_EXECUTABLE is ${PYTHON_EXECUTABLE}")
+
+set(CMAKE_LIBRARY_PATH "${CMAKE_LIBRARY_PATH} opt/python/cp35-cp35m/lib/")
+message(STATUS "CMAKE_LIBRARY_PATH is ${CMAKE_LIBRARY_PATH}")
+
 # Dependencies
 # ============
 
@@ -151,6 +156,7 @@ FetchContent_Declare(
   xeus-python
   GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
+  CMAKE_ARGS "-DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}"
 )
 FetchContent_GetProperties(xeus-python)
 if(NOT xeus-python_POPULATED)
