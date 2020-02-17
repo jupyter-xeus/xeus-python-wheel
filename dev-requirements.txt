@@ -1,3 +1,4 @@
-scikit-build
 cmake
+pytest
+jupyter_kernel_test
 
