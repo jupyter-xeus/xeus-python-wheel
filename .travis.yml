@@ -3,7 +3,7 @@ matrix:
     - sudo: required
       services:
         - docker
-      env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64
+      env: DOCKER_IMAGE=quantstack/manylinux_2010_x86_64-python-dev:latest
            PLAT=manylinux2010_x86_64
 
 install:
