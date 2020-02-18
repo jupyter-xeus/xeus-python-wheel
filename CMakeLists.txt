@@ -25,7 +25,7 @@ set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          0.23.5)
 set(PYBIND11_GIT_TAG       v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
-set(XEUS_PYTHON_GIT_TAG   kernelspec)
+set(XEUS_PYTHON_GIT_TAG   0.6.11)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -156,7 +156,7 @@ set(XPYTHON_KERNELSPEC_PATH "")
 message(STATUS "Fetching xeus-python")
 FetchContent_Declare(
   xeus-python
-  GIT_REPOSITORY https://github.com/JohanMabille/xeus-python
+  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
   CMAKE_ARGS "-DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}"
 )
