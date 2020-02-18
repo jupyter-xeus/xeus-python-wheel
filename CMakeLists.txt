@@ -25,7 +25,7 @@ set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          0.23.5)
 set(PYBIND11_GIT_TAG       v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
-set(XEUS_PYTHON_GIT_TAG   ldl)
+set(XEUS_PYTHON_GIT_TAG   kernelspec)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -150,6 +150,8 @@ if(NOT pybind11_json_POPULATED)
   FetchContent_Populate(pybind11_json)
   add_subdirectory(${pybind11_json_SOURCE_DIR} ${pybind11_json_BINARY_DIR})
 endif()
+
+set(XPYTHON_KERNELSPEC_PATH "")
 
 message(STATUS "Fetching xeus-python")
 FetchContent_Declare(
