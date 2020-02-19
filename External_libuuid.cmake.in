@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 2.8.2)
+
+project(libuuid-download NONE)
+include(ExternalProject)
+
+set(EP_SOURCE_DIR ${CMAKE_BINARY_DIR}/libuuid-src)
+set(EP_BINARY_DIR ${CMAKE_BINARY_DIR}/libuuid-src)
+set(EP_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
+
+
+set(libuuid_major_minor 2.32)
+set(libuuid_version "${libuuid_major_minor}.1")
+set(libuuid_URL "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${libuuid_major_minor}/util-linux-${libuuid_version}.tar.gz")
+set(libuuid_SHA256 3bbf9f3d4a33d6653cf0f7e4fc422091b6a38c3b1195c0ee716c67148a1a7122)
+
+
+
+ExternalProject_Add(libuuid
+    URL ${libuuid_URL}
+    URL_HASH SHA256=${libuuid_SHA256}
+    SOURCE_DIR ${EP_SOURCE_DIR}
+    BINARY_DIR ${EP_BINARY_DIR}
+    INSTALL_DIR ${EP_INSTALL_DIR}
+    CONFIGURE_COMMAND bash configure --prefix=${EP_INSTALL_DIR} --disable-all-programs --enable-libuuid
+    BUILD_COMMAND make
+    INSTALL_COMMAND make install
+)
+
