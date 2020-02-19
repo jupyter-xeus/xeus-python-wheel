@@ -28,6 +28,7 @@ setup(
     author='Sylvain Corlay, Johan Mabille',
     license='',
     packages=[],
+    install_requires=['jedi', 'pygments'],
     setup_requires=setup_requires,
     #cmake=['-DHELLO_BUILD_TESTING:BOOL=TRUE',]
     cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH='+python_path]
