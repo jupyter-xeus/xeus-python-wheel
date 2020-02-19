@@ -23,6 +23,7 @@ ExternalProject_Add(libuuid
     INSTALL_DIR ${EP_INSTALL_DIR}
     CONFIGURE_COMMAND bash configure --prefix=${EP_INSTALL_DIR} --disable-all-programs --enable-libuuid
     BUILD_COMMAND make
-    INSTALL_COMMAND make install
+    INSTALL_COMMAND make install prefix=${EP_INSTALL_DIR} DESTDIR=${EP_INSTALL_DIR}
+
 )
 
