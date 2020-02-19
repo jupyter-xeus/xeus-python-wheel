@@ -251,39 +251,3 @@ install(FILES ${libuuid_dir}/libuuid/uuid.pc
 install(FILES ${libuuid_dir}/libuuid/src/uuid.h
         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/uuid)
 
-# Install/package
-# ===============
-
-set(install_cmake_dir "${CMAKE_INSTALL_LIBDIR}/cmake/wheel")
-
-include(CMakePackageConfigHelpers)
-
-write_basic_package_version_file(wheelConfigVersion.cmake
-  VERSION ${WHEEL_VERSION}
-  COMPATIBILITY SameMajorVersion)
-
-# Build tree
-# ==========
-
-set(WHEEL_TARGETS_FILE ${wheel_export_file})
-
-configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/wheelConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/wheelConfig.cmake
-  INSTALL_DESTINATION ${install_cmake_dir}
-  PATH_VARS WHEEL_TARGETS_FILE
-  NO_CHECK_REQUIRED_COMPONENTS_MACRO # wheel does not provide components
-  INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}
-  )
-
-# Install tree
-# ============
-
-set(WHEEL_TARGETS_FILE ${CMAKE_INSTALL_PREFIX}/${install_cmake_dir}/wheelTargets.cmake)
-configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/wheelConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/cmake/wheelConfig.cmake
-  INSTALL_DESTINATION ${install_cmake_dir}
-  PATH_VARS WHEEL_TARGETS_FILE
-  NO_CHECK_REQUIRED_COMPONENTS_MACRO # wheel does not provide components
-  )
