@@ -21,8 +21,19 @@ ExternalProject_Add(libuuid
     SOURCE_DIR ${EP_SOURCE_DIR}
     BINARY_DIR ${EP_BINARY_DIR}
     INSTALL_DIR ${EP_INSTALL_DIR}
-    CONFIGURE_COMMAND bash configure --prefix=${EP_INSTALL_DIR} --disable-all-programs --enable-libuuid
+    CONFIGURE_COMMAND bash configure --disable-all-programs --enable-libuuid
     BUILD_COMMAND make
-    INSTALL_COMMAND make install
+    # On some platforms:
+    # - If `DESTDIR` is not specified with the install command, libuuid will be
+    # installed in a system prefix.
+    # - If `DESTDIR` is specified and `prefix` is not, the makefile inserts a
+    # `usr` in the library install path.
+    # - If `DESTDIR` and `prefix` are both set to the installation prefix, the
+    # header install path is a concatenation of `DESTDIR` and `prefix`,
+    # repeating the installation prefix.
+    #
+    # The solution appears to set `prefix` to an empty string and `DESTDIR` to
+    # the installation prefix.
+    INSTALL_COMMAND make install prefix="" DESTDIR=${EP_INSTALL_DIR}
 )
 
