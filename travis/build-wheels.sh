@@ -7,7 +7,7 @@ for PYBIN in /opt/python/cp3*/bin; do
     if [ "${PYBIN}" != "/opt/python/cp34-cp34m/bin" ]; then
         "${PYBIN}/pip" install scikit-build 
         "${PYBIN}/pip" install -r /io/dev-requirements.txt
-        "${PYBIN}/pip" wheel /io/ -w /io/wheelhouse/
+        "${PYBIN}/pip" wheel /io/ --verbose -w /io/wheelhouse/
     fi
 done
 
