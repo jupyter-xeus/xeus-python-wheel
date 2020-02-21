@@ -1,0 +1,58 @@
+build: false
+
+platform:
+    - x64
+
+image:
+    - Visual Studio 2015
+
+environment:
+  matrix:
+    - CONDA: "C:\\Miniconda36-x64"
+      PYTHON_VERSION: "3.6"
+      CONDA_ARCH: "64"
+    - CONDA: "C:\\Miniconda37-x64"
+      PYTHON_VERSION: "3.7"
+      CONDA_ARCH: "64"
+    - CONDA: "C:\\Miniconda38-x64"
+      PYTHON_VERSION: "3.8"
+      CONDA_ARCH: "64"
+
+init:
+    - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+    - SET PATH=%CONDA%;%CONDA%\Scripts;%CONDA%\Library\bin;%PATH%
+    - conda info
+    - python --version
+
+matrix:
+    fast_finish: true
+
+install:
+    - conda install cmake perl nasm scikit-build=0.10.0 -y -c conda-forge
+
+build_script:
+    - python setup.py bdist_wheel 
+    - ls dist/*
+
+test_script:
+
+    # create test env
+    - conda create --yes -n test_env python=%PYTHON_VERSION% nose
+    - activate test_env
+
+    # install from wheel
+    - pip install --no-index --find-links dist/ %PACKAGE_NAME%
+
+    # run tests from install wheel
+    - cd ..
+
+    # Smoke test of install_python script
+    # Use C:\PythonXY, C:\PythonXY-x64, C:\PythonXYrcZ, or C:\PythonXYrcZ-x64
+    - set CONDA=C:\Python37
+    - ps: .\install_python.ps1
+    - set CONDA=C:\Python37-x64
+    - ps: .\install_python.ps1
+    - set CONDA=C:\Python38
+    - ps: .\install_python.ps1
+    - set CONDA=C:\Python38-x64
+    - ps: .\install_python.ps1

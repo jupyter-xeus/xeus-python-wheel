@@ -43,17 +43,19 @@ if(result)
     message(FATAL_ERROR "CMake step for OpenSSL failed: ${result}")
 endif()
 
-configure_file(External_libuuid.cmake.in libuuid-download/CMakeLists.txt @ONLY)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+if(UNIX AND NOT APPLE)
+  configure_file(External_libuuid.cmake.in libuuid-download/CMakeLists.txt @ONLY)
+  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} .
-                RESULT_VARIABLE result
-                WORKING_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}/libuuid-download)
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
-                RESULT_VARIABLE result
-                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libuuid-download )
-if(result)
+                  RESULT_VARIABLE result
+                  WORKING_DIRECTORY
+                  ${CMAKE_CURRENT_BINARY_DIR}/libuuid-download)
+  execute_process(COMMAND ${CMAKE_COMMAND} --build .
+                  RESULT_VARIABLE result
+                  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libuuid-download )
+  if(result)
     message(FATAL_ERROR "CMake step for libuuid failed: ${result}")
+  endif()
 endif()
 
 # Fetch and build cmake dependencies
@@ -220,34 +222,35 @@ install(PROGRAMS ${openssl_dir}/apps/CA.pl
 # libuuid
 # =======
 
-set(libuuid_dir "${CMAKE_BINARY_DIR}/libuuid-download/libuuid-src")
+if(UNIX AND NOT APPLE)
+  set(libuuid_dir "${CMAKE_BINARY_DIR}/libuuid-download/libuuid-src")
 
-file(GLOB gmo_list "${libuuid_dir}/po/*.gmo")
-foreach(gmo_file ${gmo_list})
+  file(GLOB gmo_list "${libuuid_dir}/po/*.gmo")
+  foreach(gmo_file ${gmo_list})
     get_filename_component(name_wle ${gmo_file} NAME_WLE)
     set(gmo_destination "${libuuid_dir}/po/share/locale/${name_wle}/LC_MESSAGES/util-linux.mo")
     configure_file(${gmo_file} ${gmo_destination} COPYONLY)
-endforeach()
+  endforeach()
 
-install(DIRECTORY ${libuuid_dir}/po/share
-        DESTINATION ${CMAKE_INSTALL_PREFIX})
+  install(DIRECTORY ${libuuid_dir}/po/share
+          DESTINATION ${CMAKE_INSTALL_PREFIX})
 
-install(PROGRAMS ${libuuid_dir}/.libs/libuuid.so.1.3.0
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+  install(PROGRAMS ${libuuid_dir}/.libs/libuuid.so.1.3.0
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
-configure_file(${libuuid_dir}/.libs/libuuid.lai
-               ${libuuid_dir}/.libs/libuuid.la
-               COPYONLY)
+  configure_file(${libuuid_dir}/.libs/libuuid.lai
+                 ${libuuid_dir}/.libs/libuuid.la
+                 COPYONLY)
 
-install(FILES ${libuuid_dir}/.libs/libuuid.la
-              ${libuuid_dir}/.libs/libuuid.a
-              ${libuuid_dir}/.libs/libuuid.so.1
-              ${libuuid_dir}/.libs/libuuid.so
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+  install(FILES ${libuuid_dir}/.libs/libuuid.la
+                ${libuuid_dir}/.libs/libuuid.a
+                ${libuuid_dir}/.libs/libuuid.so.1
+                ${libuuid_dir}/.libs/libuuid.so
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
-install(FILES ${libuuid_dir}/libuuid/uuid.pc
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+  install(FILES ${libuuid_dir}/libuuid/uuid.pc
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
-install(FILES ${libuuid_dir}/libuuid/src/uuid.h
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/uuid)
-
+  install(FILES ${libuuid_dir}/libuuid/src/uuid.h
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/include/uuid)
+endif()
