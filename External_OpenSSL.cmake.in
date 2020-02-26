@@ -18,11 +18,12 @@ if(CPU_COUNT EQUAL 0)
 endif()
 
 if (WIN32)
-  # set(OPENSSL_CONFIG_COMMAND perl configure VC-WIN32 CC=cl --prefix=${EP_INSTALL_DIR} --openssldir=${EP_INSTALL_DIR})
+  set(OPENSSL_PATCH_COMMAND git apply --ignore-space-change --ignore-whitespace ${CMAKE_SOURCE_DIR}/bcryptgen.patch)
   set(OPENSSL_CONFIG_COMMAND perl configure VC-WIN64A CC=cl --prefix=${EP_INSTALL_DIR} --openssldir=${EP_INSTALL_DIR})
   set(OPENSSL_BUILD_COMMAND nmake)
   set(OPENSSL_INSTALL_COMMAND nmake install)
 else()
+  set(OPENSSL_PATCH_COMMAND "")
   set(OPENSSL_CONFIG_COMMAND ./config --prefix=${EP_INSTALL_DIR})
   set(OPENSSL_BUILD_COMMAND make -j ${CPU_COUNT})
   set(OPENSSL_INSTALL_COMMAND make install_sw install_ssldirs)
@@ -34,6 +35,7 @@ ExternalProject_Add(openssl
     SOURCE_DIR ${EP_SOURCE_DIR}
     BINARY_DIR ${EP_BINARY_DIR}
     INSTALL_DIR ${EP_INSTALL_DIR}
+    PATCH_COMMAND ${OPENSSL_PATCH_COMMAND}
     CONFIGURE_COMMAND ${OPENSSL_CONFIG_COMMAND}
     BUILD_COMMAND ${OPENSSL_BUILD_COMMAND}
     INSTALL_COMMAND ${OPENSSL_INSTALL_COMMAND}
