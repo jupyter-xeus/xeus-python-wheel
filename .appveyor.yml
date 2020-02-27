@@ -11,12 +11,15 @@ environment:
     - CONDA: "C:\\Miniconda36-x64"
       PYTHON_VERSION: "3.6"
       CONDA_ARCH: "64"
+      PACKAGE_SUFFIX: "cp36-cp36m"
     - CONDA: "C:\\Miniconda37-x64"
       PYTHON_VERSION: "3.7"
       CONDA_ARCH: "64"
+      PACKAGE_SUFFIX: "cp37-cp37m"
     - CONDA: "C:\\Miniconda38-x64"
       PYTHON_VERSION: "3.8"
       CONDA_ARCH: "64"
+      PACKAGE_SUFFIX: "cp38-cp38m"
 
 init:
     - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
@@ -41,18 +44,9 @@ test_script:
     - activate test_env
 
     # install from wheel
-    - pip install --no-index --find-links dist/ %PACKAGE_NAME%
+    - pip install --no-index --find-links dist/xeus-python-0.6.8-%PACKAGE_SUFFIX%-win_amd64.whl
 
     # run tests from install wheel
-    - cd ..
+    - cd _skbuild\win-amd64-%PYTHON_VERSION%\cmake-build\_deps\xeus-python-src\test
+    - pytest . -v
 
-    # Smoke test of install_python script
-    # Use C:\PythonXY, C:\PythonXY-x64, C:\PythonXYrcZ, or C:\PythonXYrcZ-x64
-    - set CONDA=C:\Python37
-    - ps: .\install_python.ps1
-    - set CONDA=C:\Python37-x64
-    - ps: .\install_python.ps1
-    - set CONDA=C:\Python38
-    - ps: .\install_python.ps1
-    - set CONDA=C:\Python38-x64
-    - ps: .\install_python.ps1
