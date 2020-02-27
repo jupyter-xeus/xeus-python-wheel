@@ -65,6 +65,9 @@ endif()
 include(FetchContent)
 
 message(STATUS "Fetching libzmq")
+set(BUILD_STATIC OFF CACHE BOOL "disable libzmq static build" FORCE)
+set(WITH_DOC OFF CACHE BOOL "do not generate libzmq documentation" FORCE)
+
 FetchContent_Declare(
   libzmq
   GIT_REPOSITORY https://github.com/zeromq/libzmq
