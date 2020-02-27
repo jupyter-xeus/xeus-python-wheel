@@ -67,6 +67,7 @@ include(FetchContent)
 message(STATUS "Fetching libzmq")
 set(BUILD_STATIC OFF CACHE BOOL "disable libzmq static build" FORCE)
 set(WITH_DOC OFF CACHE BOOL "do not generate libzmq documentation" FORCE)
+set(BUILD_TESTS OFF CACHE BOOL "do not build libzmq tests" FORCE)
 
 FetchContent_Declare(
   libzmq
@@ -180,48 +181,85 @@ endif()
 
 set(openssl_dir "${CMAKE_BINARY_DIR}/OpenSSL-download/openssl-src")
 
-install(PROGRAMS ${openssl_dir}/libcrypto.so.1.1
-                 ${openssl_dir}/libssl.so.1.1
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+if (UNIX)
+  install(PROGRAMS ${openssl_dir}/libcrypto.so.1.1
+                   ${openssl_dir}/libssl.so.1.1
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
-install(FILES ${openssl_dir}/libcrypto.so
-              ${openssl_dir}/libssl.so
-              ${openssl_dir}/libcrypto.a
-              ${openssl_dir}/libssl.a
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+  install(FILES ${openssl_dir}/libcrypto.so
+                ${openssl_dir}/libssl.so
+                ${openssl_dir}/libcrypto.a
+                ${openssl_dir}/libssl.a
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
-install(FILES ${openssl_dir}/libcrypto.pc
-              ${openssl_dir}/libssl.pc
-              ${openssl_dir}/openssl.pc
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+  install(FILES ${openssl_dir}/libcrypto.pc
+                ${openssl_dir}/libssl.pc
+                ${openssl_dir}/openssl.pc
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
-install(PROGRAMS ${openssl_dir}/engines/afalg.so
-                 ${openssl_dir}/engines/capi.so
-                 ${openssl_dir}/engines/padlock.so
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/engines-1.1)
+  install(PROGRAMS ${openssl_dir}/engines/afalg.so
+                   ${openssl_dir}/engines/capi.so
+                   ${openssl_dir}/engines/padlock.so
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/engines-1.1)
 
-install(PROGRAMS ${openssl_dir}/apps/openssl
-                 ${openssl_dir}/tools/c_rehash
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+  install(PROGRAMS ${openssl_dir}/apps/openssl
+                   ${openssl_dir}/tools/c_rehash
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
-install(DIRECTORY ${openssl_dir}/include/openssl
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+  install(DIRECTORY ${openssl_dir}/include/openssl
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 
-configure_file(${openssl_dir}/apps/openssl.cnf
-               ${openssl_dir}/apps/openssl.cnf.dist
-               COPYONLY)
-configure_file(${openssl_dir}/apps/ct_log_list.cnf
-               ${openssl_dir}/apps/ct_log_list.cnf.dist
-               COPYONLY)
-install(FILES ${openssl_dir}/apps/openssl.cnf
-              ${openssl_dir}/apps/openssl.cnf.dist
-              ${openssl_dir}/apps/ct_log_list.cnf
-              ${openssl_dir}/apps/ct_log_list.cnf.dist
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/ssl)
+  configure_file(${openssl_dir}/apps/openssl.cnf
+                 ${openssl_dir}/apps/openssl.cnf.dist
+                 COPYONLY)
+  configure_file(${openssl_dir}/apps/ct_log_list.cnf
+                 ${openssl_dir}/apps/ct_log_list.cnf.dist
+                 COPYONLY)
+  install(FILES ${openssl_dir}/apps/openssl.cnf
+                ${openssl_dir}/apps/openssl.cnf.dist
+                ${openssl_dir}/apps/ct_log_list.cnf
+                ${openssl_dir}/apps/ct_log_list.cnf.dist
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/ssl)
 
-install(PROGRAMS ${openssl_dir}/apps/CA.pl
-                 ${openssl_dir}/apps/tsget.pl
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/ssl/misc)
+  install(PROGRAMS ${openssl_dir}/apps/CA.pl
+                   ${openssl_dir}/apps/tsget.pl
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/ssl/misc)
+else()
+  install(PROGRAMS ${openssl_dir}/libcrypto-1_1-x64.dll
+                   ${openssl_dir}/libssl-1_1-x64.dll
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
+  install(FILES ${openssl_dir}/libcrypto.lib
+                ${openssl_dir}/libssl.lib
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+  
+  install(PROGRAMS ${openssl_dir}/engines/capi.dll
+                   ${openssl_dir}/engines/padlock.dll
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/engines-1_1)
+
+  install(PROGRAMS ${openssl_dir}/apps/openssl.exe
+                   ${openssl_dir}/tools/c_rehash.pl
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
+  install(DIRECTORY ${openssl_dir}/include/openssl
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+
+  configure_file(${openssl_dir}/apps/openssl.cnf
+                 ${openssl_dir}/apps/openssl.cnf.dist
+                 COPYONLY)
+  configure_file(${openssl_dir}/apps/ct_log_list.cnf
+                 ${openssl_dir}/apps/ct_log_list.cnf.dist
+                 COPYONLY)
+  install(FILES ${openssl_dir}/apps/openssl.cnf
+                ${openssl_dir}/apps/openssl.cnf.dist
+                ${openssl_dir}/apps/ct_log_list.cnf
+                ${openssl_dir}/apps/ct_log_list.cnf.dist
+          DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+  install(PROGRAMS ${openssl_dir}/apps/CA.pl
+                   ${openssl_dir}/apps/tsget.pl
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/misc)
+endif()
 
 # libuuid
 # =======
