@@ -180,13 +180,19 @@ endif()
 
 set(openssl_dir "${CMAKE_BINARY_DIR}/OpenSSL-download/openssl-src")
 
-if (UNIX)
-  install(PROGRAMS ${openssl_dir}/libcrypto.so.1.1
-                   ${openssl_dir}/libssl.so.1.1
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+if(UNIX)
+  if(APPLE)
+    install(PROGRAMS ${openssl_dir}/libcrypto.1.1${CMAKE_SHARED_LIBRARY_SUFFIX}
+                     ${openssl_dir}/libssl.1.1${CMAKE_SHARED_LIBRARY_SUFFIX}
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+  else()
+    install(PROGRAMS ${openssl_dir}/libcrypto${CMAKE_SHARED_LIBRARY_SUFFIX}.1.1
+                     ${openssl_dir}/libssl${CMAKE_SHARED_LIBRARY_SUFFIX}.1.1
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+  endif()
 
-  install(FILES ${openssl_dir}/libcrypto.so
-                ${openssl_dir}/libssl.so
+  install(FILES ${openssl_dir}/libcrypto${CMAKE_SHARED_LIBRARY_SUFFIX}
+                ${openssl_dir}/libssl${CMAKE_SHARED_LIBRARY_SUFFIX}
                 ${openssl_dir}/libcrypto.a
                 ${openssl_dir}/libssl.a
           DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
@@ -196,10 +202,12 @@ if (UNIX)
                 ${openssl_dir}/openssl.pc
           DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
+if(NOT APPLE)
   install(PROGRAMS ${openssl_dir}/engines/afalg.so
                    ${openssl_dir}/engines/capi.so
                    ${openssl_dir}/engines/padlock.so
           DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/engines-1.1)
+endif()
 
   install(PROGRAMS ${openssl_dir}/apps/openssl
                    ${openssl_dir}/tools/c_rehash
