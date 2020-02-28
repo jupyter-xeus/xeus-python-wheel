@@ -73,7 +73,6 @@ FetchContent_Declare(
   libzmq
   GIT_REPOSITORY https://github.com/zeromq/libzmq
   GIT_TAG ${ZEROMQ_GIT_TAG}
-  CMAKE_ARGS "-DBUILD_TESTS=OFF"
 )
 FetchContent_GetProperties(libzmq)
 if(NOT libzmq_POPULATED)
@@ -94,12 +93,11 @@ if(NOT cppzmq_POPULATED)
 endif()
 
 message(STATUS "Fetching nlohmann_json")
-set(BUILD_TESTING OFF)
+set(BUILD_TESTING OFF CACHE BOOL "do not build nlohmann_json tests" FORCE)
 FetchContent_Declare(
   nlohmann_json
   GIT_REPOSITORY https://github.com/nlohmann/json
   GIT_TAG ${JSON_GIT_TAG}
-  CMAKE_ARGS "-DBUILD_TESTING=OFF"
 )
 FetchContent_GetProperties(nlohmann_json)
 if(NOT nlohmann_json_POPULATED)
@@ -108,7 +106,7 @@ if(NOT nlohmann_json_POPULATED)
 endif()
 
 message(STATUS "Fetching xtl")
-set(BUILD_TESTS OFF)
+set(BUILD_TESTS OFF CACHE BOOL "do not build xtl tests" FORCE)
 FetchContent_Declare(
   xtl
   GIT_REPOSITORY https://github.com/xtensor-stack/xtl
@@ -121,6 +119,8 @@ if(NOT xtl_POPULATED)
 endif()
 
 message(STATUS "Fetching xeus")
+set(DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
+set(BUILD_STATIC_LIBS OFF CACHE BOOL "disable static build of xeus" FORCE)
 FetchContent_Declare(
   xeus
   GIT_REPOSITORY https://github.com/jupyter-xeus/xeus
@@ -165,7 +165,6 @@ FetchContent_Declare(
   xeus-python
   GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
-  CMAKE_ARGS "-DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}"
 )
 FetchContent_GetProperties(xeus-python)
 if(NOT xeus-python_POPULATED)
