@@ -5,9 +5,21 @@ matrix:
         - docker
       env: DOCKER_IMAGE=quantstack/manylinux_2010_x86_64-python-dev:latest
            PLAT=manylinux2010_x86_64
+    # OSX builds
+    - os: osx
+      env:
+        - PYTHON_VERSION=3.7
 
 install:
-  - docker pull $DOCKER_IMAGE
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      docker pull $DOCKER_IMAGE;
+    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      export CXX=clang++ CC=clang;
+    fi
 
 script:
-  - docker run --rm -e PLAT=$PLAT -v `pwd`:/io $DOCKER_IMAGE /io/travis/build-wheels.sh
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      docker run --rm -e PLAT=$PLAT -v `pwd`:/io $DOCKER_IMAGE /io/travis/build-wheels.sh;
+    else
+      bash ./travis/build-osx-wheel.sh; 
+    fi
