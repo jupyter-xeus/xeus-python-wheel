@@ -6,10 +6,16 @@ wget "http://repo.continuum.io/miniconda/Miniconda3-$MINCONDA_VERSION-$MINCONDA_
 bash miniconda.sh -b -p $HOME/miniconda
 export PATH="$HOME/miniconda/bin:$PATH"
 conda config --set always_yes yes --set changeps1 no
-conda install cmake scikit-build pytest jupyter_kernel_test -c conda-forge
+conda create -n build_env python=${PYTHON_VERSION}
+source activate build_env
+python --version
+
+conda install cmake scikit-build -c conda-forge
 
 python setup.py bdist_wheel
 
-pip install dist/xeus_python-0.6.8-cp37-cp37m-macosx_10_13_x86_64.whl
+pip install --find-links=dist xeus_python
+
+pip install pytest jupyter_kernel_test
 
 pytest test/ -v
