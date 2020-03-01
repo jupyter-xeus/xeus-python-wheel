@@ -1,5 +1,6 @@
 matrix:
   include:
+    # Linux builds
     - sudo: required
       services:
         - docker
@@ -8,7 +9,13 @@ matrix:
     # OSX builds
     - os: osx
       env:
+        - PYTHON_VERSION=3.6
+    - os: osx
+      env:
         - PYTHON_VERSION=3.7
+    - os: osx
+      env:
+        - PYTHON_VERSION=3.8
 
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
