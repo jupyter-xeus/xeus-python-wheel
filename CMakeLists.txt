@@ -10,6 +10,10 @@ set(wheel_export_file "${PROJECT_BINARY_DIR}/wheelTargets.cmake")
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
 
+# Default to static build
+set(BUILD_STATIC_LIBS ON CACHE BOOL "enable static build of xeus" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "disable shared build of xeus" FORCE)
+
 message(STATUS "PYTHON_EXECUTABLE is ${PYTHON_EXECUTABLE}")
 
 set(CMAKE_LIBRARY_PATH "${CMAKE_LIBRARY_PATH} opt/python/cp35-cp35m/lib/")
@@ -22,10 +26,10 @@ set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        master)
 set(XTL_GIT_TAG           0.6.12)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          0.23.6)
+set(XEUS_GIT_TAG          static-link)
 set(PYBIND11_GIT_TAG      v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
-set(XEUS_PYTHON_GIT_TAG   0.6.12)
+set(XEUS_PYTHON_GIT_TAG   static)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -65,7 +69,8 @@ endif()
 include(FetchContent)
 
 message(STATUS "Fetching libzmq")
-set(BUILD_STATIC OFF CACHE BOOL "disable libzmq static build" FORCE)
+set(BUILD_SHARED OFF CACHE BOOL "enable libzmq shared build" FORCE)
+set(BUILD_STATIC ON CACHE BOOL "enable libzmq static build" FORCE)
 set(WITH_DOC OFF CACHE BOOL "do not generate libzmq documentation" FORCE)
 set(BUILD_TESTS OFF CACHE BOOL "do not build libzmq tests" FORCE)
 
@@ -81,6 +86,7 @@ if(NOT libzmq_POPULATED)
 endif()
 
 message(STATUS "Fetching cppzmq")
+set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "Don't build cppzmq tests" FORCE)
 FetchContent_Declare(
   cppzmq
   GIT_REPOSITORY https://github.com/zeromq/cppzmq
@@ -120,10 +126,9 @@ endif()
 
 message(STATUS "Fetching xeus")
 set(DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
-set(BUILD_STATIC_LIBS OFF CACHE BOOL "disable static build of xeus" FORCE)
 FetchContent_Declare(
   xeus
-  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus
+  GIT_REPOSITORY https://github.com/SylvainCorlay/xeus
   GIT_TAG ${XEUS_GIT_TAG}
 )
 FetchContent_GetProperties(xeus)
@@ -163,7 +168,7 @@ set(XPYTHON_KERNELSPEC_PATH "")
 message(STATUS "Fetching xeus-python")
 FetchContent_Declare(
   xeus-python
-  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
+  GIT_REPOSITORY https://github.com/SylvainCorlay/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
 )
 FetchContent_GetProperties(xeus-python)
