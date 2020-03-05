@@ -19,13 +19,13 @@ message(STATUS "CMAKE_LIBRARY_PATH is ${CMAKE_LIBRARY_PATH}")
 # ============
 
 set(ZEROMQ_GIT_TAG        v4.3.2)
-set(CPPZMQ_GIT_TAG        wrap-find-package)
+set(CPPZMQ_GIT_TAG        wrap-find-package-zeromq)
 set(XTL_GIT_TAG           0.6.12)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          0.23.5)
-set(PYBIND11_GIT_TAG       v2.3)
+set(XEUS_GIT_TAG          0.23.6)
+set(PYBIND11_GIT_TAG      v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
-set(XEUS_PYTHON_GIT_TAG   0.6.11)
+set(XEUS_PYTHON_GIT_TAG   0.6.12)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -169,6 +169,8 @@ FetchContent_Declare(
 FetchContent_GetProperties(xeus-python)
 if(NOT xeus-python_POPULATED)
   FetchContent_Populate(xeus-python)
+  message(STATUS "Enabling PyPI warning for xeus-python")
+  set(XEUS_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable PyPI warning for xeus-python" FORCE)
   add_subdirectory(${xeus-python_SOURCE_DIR} ${xeus-python_BINARY_DIR})
 endif()
 
