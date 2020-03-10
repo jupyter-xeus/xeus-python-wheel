@@ -19,7 +19,7 @@ message(STATUS "CMAKE_LIBRARY_PATH is ${CMAKE_LIBRARY_PATH}")
 # ============
 
 set(ZEROMQ_GIT_TAG        v4.3.2)
-set(CPPZMQ_GIT_TAG        wrap-find-package-zeromq)
+set(CPPZMQ_GIT_TAG        master)
 set(XTL_GIT_TAG           0.6.12)
 set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          0.23.6)
@@ -83,7 +83,7 @@ endif()
 message(STATUS "Fetching cppzmq")
 FetchContent_Declare(
   cppzmq
-  GIT_REPOSITORY https://github.com/SylvainCorlay/cppzmq
+  GIT_REPOSITORY https://github.com/zeromq/cppzmq
   GIT_TAG ${CPPZMQ_GIT_TAG}
 )
 FetchContent_GetProperties(cppzmq)
