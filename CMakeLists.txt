@@ -78,6 +78,7 @@ FetchContent_Declare(
   libzmq
   GIT_REPOSITORY https://github.com/zeromq/libzmq
   GIT_TAG ${ZEROMQ_GIT_TAG}
+  PATCH_COMMAND git apply ${PROJECT_SOURCE_DIR}/0001-Problem-Missing-ZeroMQ_INCLUDE_DIR-when-only-static-.patch
 )
 FetchContent_GetProperties(libzmq)
 if(NOT libzmq_POPULATED)

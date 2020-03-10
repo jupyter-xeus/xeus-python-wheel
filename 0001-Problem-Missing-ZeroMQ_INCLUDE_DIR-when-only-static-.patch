@@ -1,0 +1,29 @@
+From bb3fa9c048654331facc61ee05dc3dcb5142af5b Mon Sep 17 00:00:00 2001
+From: myd7349 <myd7349@gmail.com>
+Date: Tue, 9 Jul 2019 13:50:24 +0800
+Subject: [PATCH] Problem: Missing ZeroMQ_INCLUDE_DIR when only static lib is
+ built
+
+---
+ builds/cmake/ZeroMQConfig.cmake.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/builds/cmake/ZeroMQConfig.cmake.in b/builds/cmake/ZeroMQConfig.cmake.in
+index 4d5a15e7..3f16e595 100644
+--- a/builds/cmake/ZeroMQConfig.cmake.in
++++ b/builds/cmake/ZeroMQConfig.cmake.in
+@@ -21,6 +21,11 @@ if(NOT TARGET libzmq AND NOT TARGET libzmq-static)
+ 
+   if (TARGET libzmq)
+     get_target_property(@PROJECT_NAME@_INCLUDE_DIR libzmq INTERFACE_INCLUDE_DIRECTORIES)
++  else ()
++    get_target_property(@PROJECT_NAME@_INCLUDE_DIR libzmq-static INTERFACE_INCLUDE_DIRECTORIES)
++  endif()
++
++  if (TARGET libzmq)
+     get_target_property(@PROJECT_NAME@_LIBRARY libzmq LOCATION)
+   endif()
+   if (TARGET libzmq-static)
+-- 
+2.25.0
+
