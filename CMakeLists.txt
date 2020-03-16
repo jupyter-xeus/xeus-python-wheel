@@ -26,10 +26,10 @@ set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        master)
 set(XTL_GIT_TAG           0.6.12)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          static-link)
+set(XEUS_GIT_TAG          0.23.9)
 set(PYBIND11_GIT_TAG      v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
-set(XEUS_PYTHON_GIT_TAG   static)
+set(XEUS_PYTHON_GIT_TAG   master)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -62,6 +62,16 @@ if(UNIX AND NOT APPLE)
     message(FATAL_ERROR "CMake step for libuuid failed: ${result}")
   endif()
 endif()
+
+configure_file(External_libsodium.cmake.in libsodium-download/CMakeLists.txt @ONLY)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}"  -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}/libsodium-download)
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libsodium-download )
 
 # Fetch and build cmake dependencies
 # ==================================
@@ -126,10 +136,11 @@ if(NOT xtl_POPULATED)
 endif()
 
 message(STATUS "Fetching xeus")
-set(DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
+set(XEUS_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
+set(XEUS_STATIC_DEPENDENCIES ON CACHE BOOL "links with static libraries" FORCE)
 FetchContent_Declare(
   xeus
-  GIT_REPOSITORY https://github.com/SylvainCorlay/xeus
+  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus
   GIT_TAG ${XEUS_GIT_TAG}
 )
 FetchContent_GetProperties(xeus)
@@ -165,11 +176,13 @@ if(NOT pybind11_json_POPULATED)
 endif()
 
 set(XPYTHON_KERNELSPEC_PATH "")
-
+set(XPYT_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
+set(XPYT_STATIC_DEPENDENCIES ON CACHE BOOL "links with static library" FORCE)
+set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable warning on PyPI wheels" FORCE)
 message(STATUS "Fetching xeus-python")
 FetchContent_Declare(
   xeus-python
-  GIT_REPOSITORY https://github.com/SylvainCorlay/xeus-python
+  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
 )
 FetchContent_GetProperties(xeus-python)
