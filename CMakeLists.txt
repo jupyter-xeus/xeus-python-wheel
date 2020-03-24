@@ -179,12 +179,44 @@ set(XPYTHON_KERNELSPEC_PATH "")
 set(XPYT_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
 set(XPYT_STATIC_DEPENDENCIES ON CACHE BOOL "links with static library" FORCE)
 set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable warning on PyPI wheels" FORCE)
+
+string(REPLACE "." ";" VERSION_LIST ${PYTHON_VERSION_STRING})
+list(GET VERSION_LIST 0 PY_VERSION_MAJOR)
+list(GET VERSION_LIST 1 PY_VERSION_MINOR)
+list(GET VERSION_LIST 2 PY_VERSION_PATCH)
+set(XPYT_SEP ":") # TODO: use ";" on windows
+
+string(CONCAT XEUS_SYSPATH
+ "" ${XPYT_SEP}
+# Standard sys.path
+ "{PREFIX}/lib/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+# Same with "..". Some Linux distributions are such that Python packages are split between /usr and /usr/local.
+ "{PREFIX}/../lb/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+# Same with "lib64". Some Linux distributions patch CPython to use lib64 instead of lib.
+ "{PREFIX}/lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+ "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+)
+set(XPYT_SYSPATH ${XEUS_SYSPATH} CACHE BOOL "Set relative paths" FORCE)
+
 message(STATUS "Fetching xeus-python")
 FetchContent_Declare(
   xeus-python
   GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
 )
+
 FetchContent_GetProperties(xeus-python)
 if(NOT xeus-python_POPULATED)
   FetchContent_Populate(xeus-python)
