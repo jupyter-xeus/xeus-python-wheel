@@ -23,7 +23,7 @@ python_path = sys.executable
 
 setup(
     name="xeus-python",
-    version="0.6.8",
+    version="0.6.13",
     description='A wheel for xeus-python',
     author='Sylvain Corlay, Johan Mabille',
     license='',
