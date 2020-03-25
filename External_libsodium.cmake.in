@@ -1,0 +1,37 @@
+cmake_minimum_required(VERSION 2.8.2)
+
+project(libsodium-download NONE)
+include(ExternalProject)
+
+set(EP_SOURCE_DIR ${CMAKE_BINARY_DIR}/libsodium-src)
+set(EP_BINARY_DIR ${CMAKE_BINARY_DIR}/libsodium-src)
+set(EP_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
+
+set(libsodium_TAG 1.0.18)
+set(libsodium_SHA256 6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1)
+set(libsodium_URL "https://download.libsodium.org/libsodium/releases/libsodium-${libsodium_TAG}.tar.gz")
+
+include(ProcessorCount)
+ProcessorCount(CPU_COUNT)
+if(CPU_COUNT EQUAL 0)
+  set(CPU_COUNT 2)
+endif()
+
+if (WIN32)
+else ()
+    set(LIBSODIUM_CONFIG_COMMAND ./configure --prefix=${EP_INSTALL_DIR})
+    set(LIBSODIUM_BUILD_COMMAND make -j ${CPU_COUNT})
+    set(LIBSODIUM_INSTALL_COMMAND make install)
+endif ()
+
+ExternalProject_Add(libsodium
+    URL ${libsodium_URL}
+    URL_HASH SHA256=${libsodium_SHA256}
+    SOURCE_DIR ${EP_SOURCE_DIR}
+    BINARY_DIR ${EP_BINARY_DIR}
+    INSTALL_DIR ${EP_INSTALL_DIR}
+    PATCH_COMMAND ${LIBSODIUM_PATCH_COMMAND}
+    CONFIGURE_COMMAND ${LIBSODIUM_CONFIG_COMMAND}
+    BUILD_COMMAND ${LIBSODIUM_BUILD_COMMAND}
+    INSTALL_COMMAND ${LIBSODIUM_INSTALL_COMMAND}
+)

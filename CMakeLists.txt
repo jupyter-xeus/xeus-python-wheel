@@ -10,6 +10,10 @@ set(wheel_export_file "${PROJECT_BINARY_DIR}/wheelTargets.cmake")
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
 
+# Default to static build
+set(BUILD_STATIC_LIBS ON CACHE BOOL "enable static build of xeus" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "disable shared build of xeus" FORCE)
+
 message(STATUS "PYTHON_EXECUTABLE is ${PYTHON_EXECUTABLE}")
 
 set(CMAKE_LIBRARY_PATH "${CMAKE_LIBRARY_PATH} opt/python/cp35-cp35m/lib/")
@@ -22,10 +26,10 @@ set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        master)
 set(XTL_GIT_TAG           0.6.12)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          0.23.6)
+set(XEUS_GIT_TAG          0.23.9)
 set(PYBIND11_GIT_TAG      v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
-set(XEUS_PYTHON_GIT_TAG   0.6.12)
+set(XEUS_PYTHON_GIT_TAG   0.6.13)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -59,13 +63,24 @@ if(UNIX AND NOT APPLE)
   endif()
 endif()
 
+configure_file(External_libsodium.cmake.in libsodium-download/CMakeLists.txt @ONLY)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}"  -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}/libsodium-download)
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+                RESULT_VARIABLE result
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libsodium-download )
+
 # Fetch and build cmake dependencies
 # ==================================
 
 include(FetchContent)
 
 message(STATUS "Fetching libzmq")
-set(BUILD_STATIC OFF CACHE BOOL "disable libzmq static build" FORCE)
+set(BUILD_SHARED OFF CACHE BOOL "enable libzmq shared build" FORCE)
+set(BUILD_STATIC ON CACHE BOOL "enable libzmq static build" FORCE)
 set(WITH_DOC OFF CACHE BOOL "do not generate libzmq documentation" FORCE)
 set(BUILD_TESTS OFF CACHE BOOL "do not build libzmq tests" FORCE)
 
@@ -73,6 +88,7 @@ FetchContent_Declare(
   libzmq
   GIT_REPOSITORY https://github.com/zeromq/libzmq
   GIT_TAG ${ZEROMQ_GIT_TAG}
+  PATCH_COMMAND git apply ${PROJECT_SOURCE_DIR}/0001-Problem-Missing-ZeroMQ_INCLUDE_DIR-when-only-static-.patch
 )
 FetchContent_GetProperties(libzmq)
 if(NOT libzmq_POPULATED)
@@ -81,6 +97,7 @@ if(NOT libzmq_POPULATED)
 endif()
 
 message(STATUS "Fetching cppzmq")
+set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "Don't build cppzmq tests" FORCE)
 FetchContent_Declare(
   cppzmq
   GIT_REPOSITORY https://github.com/zeromq/cppzmq
@@ -119,8 +136,8 @@ if(NOT xtl_POPULATED)
 endif()
 
 message(STATUS "Fetching xeus")
-set(DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
-set(BUILD_STATIC_LIBS OFF CACHE BOOL "disable static build of xeus" FORCE)
+set(XEUS_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
+set(XEUS_STATIC_DEPENDENCIES ON CACHE BOOL "links with static libraries" FORCE)
 FetchContent_Declare(
   xeus
   GIT_REPOSITORY https://github.com/jupyter-xeus/xeus
@@ -159,6 +176,39 @@ if(NOT pybind11_json_POPULATED)
 endif()
 
 set(XPYTHON_KERNELSPEC_PATH "")
+set(XPYT_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
+set(XPYT_STATIC_DEPENDENCIES ON CACHE BOOL "links with static library" FORCE)
+set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable warning on PyPI wheels" FORCE)
+
+string(REPLACE "." ";" VERSION_LIST ${PYTHON_VERSION_STRING})
+list(GET VERSION_LIST 0 PY_VERSION_MAJOR)
+list(GET VERSION_LIST 1 PY_VERSION_MINOR)
+list(GET VERSION_LIST 2 PY_VERSION_PATCH)
+set(XPYT_SEP ":") # TODO: use ";" on windows
+
+string(CONCAT XEUS_SYSPATH
+ "" ${XPYT_SEP}
+# Standard sys.path
+ "{PREFIX}/lib/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+# Same with "..". Some Linux distributions are such that Python packages are split between /usr and /usr/local.
+ "{PREFIX}/../lb/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+# Same with "lib64". Some Linux distributions patch CPython to use lib64 instead of lib.
+ "{PREFIX}/lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+ "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+)
+set(XPYT_SYSPATH ${XEUS_SYSPATH} CACHE BOOL "Set relative paths" FORCE)
 
 message(STATUS "Fetching xeus-python")
 FetchContent_Declare(
@@ -166,6 +216,7 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
 )
+
 FetchContent_GetProperties(xeus-python)
 if(NOT xeus-python_POPULATED)
   FetchContent_Populate(xeus-python)
@@ -174,134 +225,3 @@ if(NOT xeus-python_POPULATED)
   add_subdirectory(${xeus-python_SOURCE_DIR} ${xeus-python_BINARY_DIR})
 endif()
 
-# Add non-cmake dependencies to cmake install_manifest
-# ====================================================
-
-# OpenSSL
-# =======
-
-set(openssl_dir "${CMAKE_BINARY_DIR}/OpenSSL-download/openssl-src")
-
-if(UNIX)
-  if(APPLE)
-    install(PROGRAMS ${openssl_dir}/libcrypto.1.1${CMAKE_SHARED_LIBRARY_SUFFIX}
-                     ${openssl_dir}/libssl.1.1${CMAKE_SHARED_LIBRARY_SUFFIX}
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-  else()
-    install(PROGRAMS ${openssl_dir}/libcrypto${CMAKE_SHARED_LIBRARY_SUFFIX}.1.1
-                     ${openssl_dir}/libssl${CMAKE_SHARED_LIBRARY_SUFFIX}.1.1
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-  endif()
-
-  install(FILES ${openssl_dir}/libcrypto${CMAKE_SHARED_LIBRARY_SUFFIX}
-                ${openssl_dir}/libssl${CMAKE_SHARED_LIBRARY_SUFFIX}
-                ${openssl_dir}/libcrypto.a
-                ${openssl_dir}/libssl.a
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-
-  install(FILES ${openssl_dir}/libcrypto.pc
-                ${openssl_dir}/libssl.pc
-                ${openssl_dir}/openssl.pc
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
-
-if(NOT APPLE)
-  install(PROGRAMS ${openssl_dir}/engines/afalg.so
-                   ${openssl_dir}/engines/capi.so
-                   ${openssl_dir}/engines/padlock.so
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/engines-1.1)
-endif()
-
-  install(PROGRAMS ${openssl_dir}/apps/openssl
-                   ${openssl_dir}/tools/c_rehash
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-
-  install(DIRECTORY ${openssl_dir}/include/openssl
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
-
-  configure_file(${openssl_dir}/apps/openssl.cnf
-                 ${openssl_dir}/apps/openssl.cnf.dist
-                 COPYONLY)
-  configure_file(${openssl_dir}/apps/ct_log_list.cnf
-                 ${openssl_dir}/apps/ct_log_list.cnf.dist
-                 COPYONLY)
-  install(FILES ${openssl_dir}/apps/openssl.cnf
-                ${openssl_dir}/apps/openssl.cnf.dist
-                ${openssl_dir}/apps/ct_log_list.cnf
-                ${openssl_dir}/apps/ct_log_list.cnf.dist
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/ssl)
-
-  install(PROGRAMS ${openssl_dir}/apps/CA.pl
-                   ${openssl_dir}/apps/tsget.pl
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/ssl/misc)
-else()
-  install(PROGRAMS ${openssl_dir}/libcrypto-1_1-x64.dll
-                   ${openssl_dir}/libssl-1_1-x64.dll
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-
-  install(FILES ${openssl_dir}/libcrypto.lib
-                ${openssl_dir}/libssl.lib
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-  
-  install(PROGRAMS ${openssl_dir}/engines/capi.dll
-                   ${openssl_dir}/engines/padlock.dll
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/engines-1_1)
-
-  install(PROGRAMS ${openssl_dir}/apps/openssl.exe
-                   ${openssl_dir}/tools/c_rehash.pl
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-
-  install(DIRECTORY ${openssl_dir}/include/openssl
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
-
-  configure_file(${openssl_dir}/apps/openssl.cnf
-                 ${openssl_dir}/apps/openssl.cnf.dist
-                 COPYONLY)
-  configure_file(${openssl_dir}/apps/ct_log_list.cnf
-                 ${openssl_dir}/apps/ct_log_list.cnf.dist
-                 COPYONLY)
-  install(FILES ${openssl_dir}/apps/openssl.cnf
-                ${openssl_dir}/apps/openssl.cnf.dist
-                ${openssl_dir}/apps/ct_log_list.cnf
-                ${openssl_dir}/apps/ct_log_list.cnf.dist
-          DESTINATION ${CMAKE_INSTALL_PREFIX})
-
-  install(PROGRAMS ${openssl_dir}/apps/CA.pl
-                   ${openssl_dir}/apps/tsget.pl
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/misc)
-endif()
-
-# libuuid
-# =======
-
-if(UNIX AND NOT APPLE)
-  set(libuuid_dir "${CMAKE_BINARY_DIR}/libuuid-download/libuuid-src")
-
-  file(GLOB gmo_list "${libuuid_dir}/po/*.gmo")
-  foreach(gmo_file ${gmo_list})
-    get_filename_component(name_wle ${gmo_file} NAME_WLE)
-    set(gmo_destination "${libuuid_dir}/po/share/locale/${name_wle}/LC_MESSAGES/util-linux.mo")
-    configure_file(${gmo_file} ${gmo_destination} COPYONLY)
-  endforeach()
-
-  install(DIRECTORY ${libuuid_dir}/po/share
-          DESTINATION ${CMAKE_INSTALL_PREFIX})
-
-  install(PROGRAMS ${libuuid_dir}/.libs/libuuid.so.1.3.0
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-
-  configure_file(${libuuid_dir}/.libs/libuuid.lai
-                 ${libuuid_dir}/.libs/libuuid.la
-                 COPYONLY)
-
-  install(FILES ${libuuid_dir}/.libs/libuuid.la
-                ${libuuid_dir}/.libs/libuuid.a
-                ${libuuid_dir}/.libs/libuuid.so.1
-                ${libuuid_dir}/.libs/libuuid.so
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-
-  install(FILES ${libuuid_dir}/libuuid/uuid.pc
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
-
-  install(FILES ${libuuid_dir}/libuuid/src/uuid.h
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/include/uuid)
-endif()
