@@ -193,7 +193,7 @@ string(CONCAT XEUS_SYSPATH
  "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
  "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
 # Same with "..". Some Linux distributions are such that Python packages are split between /usr and /usr/local.
- "{PREFIX}/../lb/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/../lib/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
  "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
  "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
  "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
