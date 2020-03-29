@@ -34,7 +34,7 @@ install:
     - conda install cmake perl nasm scikit-build=0.10.0 -y -c conda-forge
 
 build_script:
-    - python setup.py bdist_wheel 
+    - pip wheel --verbose .
     - ls dist/*
 
 test_script:

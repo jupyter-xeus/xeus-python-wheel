@@ -1,4 +1,5 @@
 cmake
 pytest
+scikit-build
 jupyter_kernel_test
 

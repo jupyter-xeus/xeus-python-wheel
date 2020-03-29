@@ -10,9 +10,8 @@ conda create -n build_env python=${PYTHON_VERSION}
 source activate build_env
 python --version
 
-conda install cmake scikit-build -c conda-forge
-
-python setup.py bdist_wheel
+pip install -r dev-requirements.txt
+pip wheel . --verbose -w dist
 
 pip install --find-links=dist xeus_python
 
