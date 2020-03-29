@@ -191,21 +191,40 @@ string(CONCAT XEUS_SYSPATH
  "{PREFIX}/lib/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
  "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
  "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
  "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
-# Same with "..". Some Linux distributions are such that Python packages are split between /usr and /usr/local.
+# Same with "..".
+# Some Linux distributions (such as Fedora) split packages between /usr and /usr/local
+# and set sys.prefix to /usr/local
  "{PREFIX}/../lib/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
  "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
  "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
  "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+# Same with "local".
+# Some Linux distributions (such as Debian) split packages between /usr and /usr/local
+# and set sys.prefix to /usr
+ "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
+ "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
 # Same with "lib64". Some Linux distributions patch CPython to use lib64 instead of lib.
  "{PREFIX}/lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
  "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
  "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
  "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
  "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
  "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
  "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
  "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
+ "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
+ "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
+ "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
+ "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
+ "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
 )
 set(XPYT_SYSPATH ${XEUS_SYSPATH} CACHE BOOL "Set relative paths" FORCE)
 
