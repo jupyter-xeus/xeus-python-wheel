@@ -35,7 +35,7 @@ install:
 
 build_script:
     - pip wheel --verbose .
-    - ls dist/*
+    - ls *.whl
 
 test_script:
 
@@ -45,7 +45,7 @@ test_script:
     - conda install pytest jupyter_kernel_test -y -c conda-forge
 
     # install from wheel
-    - pip install dist/xeus_python-0.6.8-%PACKAGE_SUFFIX%-win_amd64.whl
+    - pip install ./xeus_python-0.6.13-%PACKAGE_SUFFIX%-win_amd64.whl
 
     # run tests from install wheel
     - cd test

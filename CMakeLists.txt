@@ -29,7 +29,7 @@ set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          0.23.10)
 set(PYBIND11_GIT_TAG      v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
-set(XEUS_PYTHON_GIT_TAG   0.6.13)
+set(XEUS_PYTHON_GIT_TAG   master)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -148,7 +148,6 @@ if(NOT xeus_POPULATED)
   add_subdirectory(${xeus_SOURCE_DIR} ${xeus_BINARY_DIR})
 endif()
 
-
 message(STATUS "Fetching pybind11")
 set(PYBIND11_TEST OFF)
 FetchContent_Declare(
@@ -176,8 +175,10 @@ endif()
 
 set(XPYTHON_KERNELSPEC_PATH "")
 set(XPYT_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
-set(XPYT_STATIC_DEPENDENCIES ON CACHE BOOL "links with static library" FORCE)
 set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable warning on PyPI wheels" FORCE)
+set(XPYT_BUILD_SHARED OFF CACHE BOOL "Don't produce libxeus-python.so" FORCE)
+set(XPYT_USE_SHARED_XEUS OFF CACHE BOOL "Link with static libxeus.a" FORCE)
+set(XPYT_USE_SHARED_XEUS_PYTHON OFF CACHE BOOL "Link with static libxeus-python.a" FORCE)
 
 string(REPLACE "." ";" VERSION_LIST ${PYTHON_VERSION_STRING})
 list(GET VERSION_LIST 0 PY_VERSION_MAJOR)
