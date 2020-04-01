@@ -15,7 +15,7 @@ done
 for PYBIN in /opt/python/cp3*/bin; do
     export LD_LIBRARY_PATH_BU=$LD_LIBRARY_PATH
     export PATH_BU=$PATH
-    export PATH=$PATH:${PYBIN}
+    export PATH=${PYBIN}:$PATH
     if [ "${PYBIN}" == "/opt/python/cp34-cp34m/bin" ]; then
         continue
     elif [ "${PYBIN}" == "/opt/python/cp35-cp35m/bin" ]; then

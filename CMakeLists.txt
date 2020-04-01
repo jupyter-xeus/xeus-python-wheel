@@ -29,7 +29,7 @@ set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          0.23.10)
 set(PYBIND11_GIT_TAG      v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
-set(XEUS_PYTHON_GIT_TAG   master)
+set(XEUS_PYTHON_GIT_TAG   dynamic-syspath)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -227,66 +227,16 @@ endif()
 
 message(STATUS "Fetching xeus-python")
 
-set(XPYTHON_KERNELSPEC_PATH "")
-set(XPYT_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
-
-string(REPLACE "." ";" VERSION_LIST ${PYTHON_VERSION_STRING})
-list(GET VERSION_LIST 0 PY_VERSION_MAJOR)
-list(GET VERSION_LIST 1 PY_VERSION_MINOR)
-list(GET VERSION_LIST 2 PY_VERSION_PATCH)
-set(XPYT_SEP ":") # TODO: use ";" on windows
-
-string(CONCAT XEUS_SYSPATH
- "" ${XPYT_SEP}
-# Standard sys.path
- "{PREFIX}/lib/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
- "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
- "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
- "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
- "{PREFIX}/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
-# Same with "..".
-# Some Linux distributions (such as Fedora) split packages between /usr and /usr/local
-# and set sys.prefix to /usr/local
- "{PREFIX}/../lib/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
- "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
- "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
- "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
- "{PREFIX}/../lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
-# Same with "local".
-# Some Linux distributions (such as Debian) split packages between /usr and /usr/local
-# and set sys.prefix to /usr
- "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
- "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
- "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
- "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
- "{PREFIX}/local/lib/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
-# Same with "lib64". Some Linux distributions patch CPython to use lib64 instead of lib.
- "{PREFIX}/lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
- "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
- "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
- "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
- "{PREFIX}/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
- "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
- "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
- "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
- "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
- "{PREFIX}/../lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
- "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}${PY_VERSION_MINOR}.zip" ${XPYT_SEP}
- "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}" ${XPYT_SEP}
- "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/lib-dynload" ${XPYT_SEP}
- "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/dist-packages" ${XPYT_SEP}
- "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
-)
-set(XPYT_SYSPATH ${XEUS_SYSPATH} CACHE BOOL "Set relative paths" FORCE)
-
 set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable PyPI warning for xeus-python" FORCE)
 set(XPYT_BUILD_SHARED OFF CACHE BOOL "Do not build xeus-python shared object" FORCE)
 set(XPYT_USE_SHARED_XEUS OFF CACHE BOOL "Link statically with libxeus.a" FORCE)
 set(XPYT_USE_SHARED_XEUS_PYTHON OFF CACHE BOOL "Link statically with libxeus-python.a" FORCE)
+set(XPYT_DYNAMIC_SYSPATH ON CACHE BOOL "Determine sys.path dynamically" FORCE)
+set(XPYT_DROP_PREFIX_PATH ON CACHE BOOL "Drop prefix in kernelspec and Python executable path" FORCE)
 
 FetchContent_Declare(
   xeus-python
-  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
+  GIT_REPOSITORY https://github.com/SylvainCorlay/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
 )
 
