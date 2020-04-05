@@ -78,7 +78,11 @@ execute_process(COMMAND ${CMAKE_COMMAND} --build .
 
 include(FetchContent)
 
-message(STATUS "Fetching libzmq")
+# LibZMQ
+# ------
+
+message(STATUS "Libzmq")
+
 set(BUILD_SHARED OFF CACHE BOOL "enable libzmq shared build" FORCE)
 set(BUILD_STATIC ON CACHE BOOL "enable libzmq static build" FORCE)
 set(WITH_DOC OFF CACHE BOOL "do not generate libzmq documentation" FORCE)
@@ -89,96 +93,142 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/zeromq/libzmq
   GIT_TAG ${ZEROMQ_GIT_TAG}
 )
+
 FetchContent_GetProperties(libzmq)
+
 if(NOT libzmq_POPULATED)
   FetchContent_Populate(libzmq)
   add_subdirectory(${libzmq_SOURCE_DIR} ${libzmq_BINARY_DIR})
 endif()
 
+# CppZMQ
+# ------
+
 message(STATUS "Fetching cppzmq")
+
 set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "Don't build cppzmq tests" FORCE)
+
 FetchContent_Declare(
   cppzmq
   GIT_REPOSITORY https://github.com/zeromq/cppzmq
   GIT_TAG ${CPPZMQ_GIT_TAG}
 )
+
 FetchContent_GetProperties(cppzmq)
+
 if(NOT cppzmq_POPULATED)
   FetchContent_Populate(cppzmq)
   add_subdirectory(${cppzmq_SOURCE_DIR} ${cppzmq_BINARY_DIR})
 endif()
 
+# Nlohmann_JSON
+# -------------
+
 message(STATUS "Fetching nlohmann_json")
+
 set(BUILD_TESTING OFF CACHE BOOL "do not build nlohmann_json tests" FORCE)
+
 FetchContent_Declare(
   nlohmann_json
   GIT_REPOSITORY https://github.com/nlohmann/json
   GIT_TAG ${JSON_GIT_TAG}
 )
+
 FetchContent_GetProperties(nlohmann_json)
+
 if(NOT nlohmann_json_POPULATED)
   FetchContent_Populate(nlohmann_json)
   add_subdirectory(${nlohmann_json_SOURCE_DIR} ${nlohmann_json_BINARY_DIR})
 endif()
 
+# Xtl
+# ---
+
 message(STATUS "Fetching xtl")
+
 set(BUILD_TESTS OFF CACHE BOOL "do not build xtl tests" FORCE)
+
 FetchContent_Declare(
   xtl
   GIT_REPOSITORY https://github.com/xtensor-stack/xtl
   GIT_TAG ${XTL_GIT_TAG}
 )
+
 FetchContent_GetProperties(xtl)
+
 if(NOT xtl_POPULATED)
   FetchContent_Populate(xtl)
   add_subdirectory(${xtl_SOURCE_DIR} ${xtl_BINARY_DIR})
 endif()
 
+# Xeus
+# ----
+
 message(STATUS "Fetching xeus")
+
 set(XEUS_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
 set(XEUS_STATIC_DEPENDENCIES ON CACHE BOOL "links with static libraries" FORCE)
+set(XEUS_BUILD_SHARED OFF CACHE BOOL "Do not build xeus shared object" FORCE)
+set(XEUS_BUILD_STATIC ON CACHE BOOL "Build xeus static library" FORCE)
+
 FetchContent_Declare(
   xeus
   GIT_REPOSITORY https://github.com/jupyter-xeus/xeus
   GIT_TAG ${XEUS_GIT_TAG}
 )
+
 FetchContent_GetProperties(xeus)
+
 if(NOT xeus_POPULATED)
   FetchContent_Populate(xeus)
   add_subdirectory(${xeus_SOURCE_DIR} ${xeus_BINARY_DIR})
 endif()
 
+# Pybind11
+# --------
+
 message(STATUS "Fetching pybind11")
+
 set(PYBIND11_TEST OFF)
+
 FetchContent_Declare(
   pybind11
   GIT_REPOSITORY https://github.com/pybind/pybind11
   GIT_TAG ${PYBIND11_GIT_TAG}
 )
+
 FetchContent_GetProperties(pybind11)
+
 if(NOT pybind11_POPULATED)
   FetchContent_Populate(pybind11)
   add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
 endif()
  
+# Pybind11_JSON
+# -------------
+
 message(STATUS "Fetching pybind11_json")
+
 FetchContent_Declare(
   pybind11_json
   GIT_REPOSITORY https://github.com/pybind/pybind11_json
   GIT_TAG ${PYBIND11_JSON_GIT_TAG}
 )
+
 FetchContent_GetProperties(pybind11_json)
+
 if(NOT pybind11_json_POPULATED)
   FetchContent_Populate(pybind11_json)
   add_subdirectory(${pybind11_json_SOURCE_DIR} ${pybind11_json_BINARY_DIR})
 endif()
 
+# Xeus-Python
+# -----------
+
+message(STATUS "Fetching xeus-python")
+
 set(XPYTHON_KERNELSPEC_PATH "")
 set(XPYT_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
-set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable warning on PyPI wheels" FORCE)
-set(XPYT_BUILD_SHARED OFF CACHE BOOL "Don't produce libxeus-python.so" FORCE)
-set(XPYT_USE_SHARED_XEUS OFF CACHE BOOL "Link with static libxeus.a" FORCE)
-set(XPYT_USE_SHARED_XEUS_PYTHON OFF CACHE BOOL "Link with static libxeus-python.a" FORCE)
 
 string(REPLACE "." ";" VERSION_LIST ${PYTHON_VERSION_STRING})
 list(GET VERSION_LIST 0 PY_VERSION_MAJOR)
@@ -229,7 +279,11 @@ string(CONCAT XEUS_SYSPATH
 )
 set(XPYT_SYSPATH ${XEUS_SYSPATH} CACHE BOOL "Set relative paths" FORCE)
 
-message(STATUS "Fetching xeus-python")
+set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable PyPI warning for xeus-python" FORCE)
+set(XPYT_BUILD_SHARED OFF CACHE BOOL "Do not build xeus-python shared object" FORCE)
+set(XPYT_USE_SHARED_XEUS OFF CACHE BOOL "Link statically with libxeus.a" FORCE)
+set(XPYT_USE_SHARED_XEUS_PYTHON OFF CACHE BOOL "Link statically with libxeus-python.a" FORCE)
+
 FetchContent_Declare(
   xeus-python
   GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
@@ -239,8 +293,6 @@ FetchContent_Declare(
 FetchContent_GetProperties(xeus-python)
 if(NOT xeus-python_POPULATED)
   FetchContent_Populate(xeus-python)
-  message(STATUS "Enabling PyPI warning for xeus-python")
-  set(XEUS_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable PyPI warning for xeus-python" FORCE)
   add_subdirectory(${xeus-python_SOURCE_DIR} ${xeus-python_BINARY_DIR})
 endif()
 
