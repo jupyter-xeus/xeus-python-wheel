@@ -7,7 +7,7 @@ set(EP_SOURCE_DIR ${CMAKE_BINARY_DIR}/openssl-src)
 set(EP_BINARY_DIR ${CMAKE_BINARY_DIR}/openssl-src)
 set(EP_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
 
-if(NOT APPLE)
+if(UNIX AND NOT APPLE)
     set(openssl_TAG 1.0.2u)
     set(openssl_SHA256 ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16)
     set(openssl_URL "http://www.openssl.org/source/old/1.0.2/openssl-${openssl_TAG}.tar.gz")
