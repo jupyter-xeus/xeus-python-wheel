@@ -26,10 +26,14 @@ set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        master)
 set(XTL_GIT_TAG           0.6.12)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          0.23.12)
+set(XEUS_GIT_TAG          0.23.10)
 set(PYBIND11_GIT_TAG      v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
+<<<<<<< HEAD
 set(XEUS_PYTHON_GIT_TAG   master)
+=======
+set(XEUS_PYTHON_GIT_TAG   dynamic-syspath)
+>>>>>>> e85594d... Enable dynamic sys.path
 
 # pre-build non-cmake dependencies
 # ================================
@@ -222,6 +226,7 @@ if(NOT pybind11_json_POPULATED)
   add_subdirectory(${pybind11_json_SOURCE_DIR} ${pybind11_json_BINARY_DIR})
 endif()
 
+<<<<<<< HEAD
 # Xeus-Python
 # -----------
 
@@ -278,6 +283,8 @@ string(CONCAT XEUS_SYSPATH
  "{PREFIX}/local/lib64/python${PY_VERSION_MAJOR}.${PY_VERSION_MINOR}/site-packages" ${XPYT_SEP}
 )
 set(XPYT_SYSPATH ${XEUS_SYSPATH} CACHE BOOL "Set relative paths" FORCE)
+=======
+>>>>>>> e85594d... Enable dynamic sys.path
 
 set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable PyPI warning for xeus-python" FORCE)
 set(XPYT_BUILD_SHARED OFF CACHE BOOL "Do not build xeus-python shared object" FORCE)
@@ -286,13 +293,23 @@ set(XPYT_USE_SHARED_XEUS_PYTHON OFF CACHE BOOL "Link statically with libxeus-pyt
 
 FetchContent_Declare(
   xeus-python
-  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
+  GIT_REPOSITORY https://github.com/SylvainCorlay/xeus-python
   GIT_TAG ${XEUS_PYTHON_GIT_TAG}
 )
 
 FetchContent_GetProperties(xeus-python)
 if(NOT xeus-python_POPULATED)
   FetchContent_Populate(xeus-python)
+<<<<<<< HEAD
+=======
+  message(STATUS "Enabling PyPI warning for xeus-python")
+  set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable PyPI warning for xeus-python" FORCE)
+  set(XPYT_DYNAMIC_SYSPATH ON CACHE BOOL "Determine sys.path dynamically" FORCE)
+  set(XPYT_DROP_PREFIX_PATH ON CACHE BOOL "Drop prefix in kernelspec and Python executable path" FORCE)
+  set(XPYT_BUILD_SHARED OFF CACHE BOOL "Do not build xeus-python shared object" FORCE)
+  set(XPYT_USE_SHARED_XEUS OFF CACHE BOOL "Link statically with libxeus.a" FORCE)
+  set(XPYT_USE_SHARED_XEUS_PYTHON OFF CACHE BOOL "Link statically with libxeus-python.a" FORCE)
+>>>>>>> e85594d... Enable dynamic sys.path
   add_subdirectory(${xeus-python_SOURCE_DIR} ${xeus-python_BINARY_DIR})
 endif()
 
