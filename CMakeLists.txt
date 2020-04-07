@@ -26,7 +26,7 @@ set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        master)
 set(XTL_GIT_TAG           0.6.12)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          0.23.12)
+set(XEUS_GIT_TAG          0.23.13)
 set(PYBIND11_GIT_TAG      v2.3)
 set(PYBIND11_JSON_GIT_TAG 0.2.4)
 set(XEUS_PYTHON_GIT_TAG   0.7.0)
@@ -168,8 +168,8 @@ message(STATUS "Fetching xeus")
 
 set(XEUS_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
 set(XEUS_STATIC_DEPENDENCIES ON CACHE BOOL "links with static libraries" FORCE)
-set(XEUS_BUILD_SHARED OFF CACHE BOOL "Do not build xeus shared object" FORCE)
-set(XEUS_BUILD_STATIC ON CACHE BOOL "Build xeus static library" FORCE)
+set(XEUS_BUILD_SHARED_LIBS OFF CACHE BOOL "Do not build xeus shared object" FORCE)
+set(XEUS_BUILD_STATIC_LIBS ON CACHE BOOL "Build xeus static library" FORCE)
 
 FetchContent_Declare(
   xeus
