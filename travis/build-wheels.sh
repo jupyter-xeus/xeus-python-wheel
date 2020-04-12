@@ -11,6 +11,9 @@ for PYBIN in /opt/python/cp3*/bin; do
     fi
 done
 
+echo "What is in wheelhouse:"
+ls /io/wheelhouse
+
 # Install packages and test
 for PYBIN in /opt/python/cp3*/bin; do
     export LD_LIBRARY_PATH_BU=$LD_LIBRARY_PATH
