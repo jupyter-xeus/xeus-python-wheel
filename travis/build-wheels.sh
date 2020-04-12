@@ -1,16 +1,32 @@
 #!/bin/bash
-
 set -e -x
 
 # Compile wheels
+echo Compiling wheels:
 for PYBIN in /opt/python/cp3*/bin; do
     if [ "${PYBIN}" != "/opt/python/cp34-cp34m/bin" ]; then
         "${PYBIN}/pip" install -r /io/dev-requirements.txt
-        "${PYBIN}/pip" wheel /io/ -w /io/wheelhouse/
+        "${PYBIN}/pip" wheel /io/ -w wheels/
         # "${PYBIN}/pip" wheel /io/ --verbose -w /io/wheelhouse/
     fi
 done
 
+# Relabel wheels into manylinux
+echo Built wheels:
+ls wheels/*.whl
+
+echo Invoking auditwheel:
+for whl in wheels/*.whl; do
+    auditwheel repair "$whl" --plat $PLAT -w /io/wheelhouse/
+done
+
+echo Relabelled wheels:
+ls /io/wheelhouse/*.whl
+
+echo Copy platform-independent wheels:
+cp wheels/*-any.whl /io/wheelhouse/
+
+echo Testing wheels:
 # Install packages and test
 for PYBIN in /opt/python/cp3*/bin; do
     export LD_LIBRARY_PATH_BU=$LD_LIBRARY_PATH
