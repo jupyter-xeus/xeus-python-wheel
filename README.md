@@ -10,7 +10,7 @@ The following packages must be installed in the environment to build xeus-python
 
 - `cmake`
 - `scikit-build`
-- `perl` (required to build `OpenSSL`)
+- `perl` (required to build `OpenSSL` on Windows)
 - `nasm` (required to build `OpenSSL` on Windows)
 
 The `pytest` package is also required to test the resulting package.
@@ -18,7 +18,15 @@ The `pytest` package is also required to test the resulting package.
 To build the wheel in your local environment, run
 
 ```
-python setup.py bdist_wheel
+pip wheel .
 ```
 
 from the source directory.
+
+## Building the manylinux wheels
+
+Building the manylinux wheels requires docker.
+
+```bash
+docker run --rm -e PLAT=manylinux2010_x86_64 -v `pwd`:/io quantstack/manylinux_2010_x86_64-python-dev:latest /io/travis/build-wheels.sh
+```
