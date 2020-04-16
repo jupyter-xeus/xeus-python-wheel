@@ -37,9 +37,6 @@ coverage.xml
 # Translations
 *.mo
 
-# Sphinx
-docs/_build
-
 # IDE junk
 .idea/*
 *.swp
@@ -47,3 +44,5 @@ docs/_build
 # build output (testing)
 skbuild/cmake_test_compile/*
 
+# Generated kernelspec
+kernels/xpython/kernel.json

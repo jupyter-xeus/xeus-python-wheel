@@ -1,0 +1,11 @@
+{
+  "display_name": "xpython-test",
+  "argv": [
+      "@XPYT_PYTHON_EXECUTABLE_NAME@",
+      "-m",
+      "xpython_launcher",
+      "-f",
+      "{connection_file}"
+  ],
+  "language": "python"
+}
