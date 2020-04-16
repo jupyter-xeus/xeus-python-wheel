@@ -17,4 +17,5 @@ pip install --find-links=dist xeus_python
 
 pip install pytest jupyter_kernel_test
 
-pytest test/ -v
+cd test
+pytest ./ -v
