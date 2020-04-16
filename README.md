@@ -28,5 +28,5 @@ from the source directory.
 Building the manylinux wheels requires docker.
 
 ```bash
-docker run --rm -e PLAT=manylinux2010_x86_64 -v `pwd`:/io quantstack/manylinux_2010_x86_64-python-dev:latest /io/travis/build-wheels.sh
+docker run --rm -e PLAT=manylinux2010_x86_64 -v `pwd`:/io quay.io/pypa/manylinux2010_x86_64 /io/travis/build-wheels.sh
 ```
