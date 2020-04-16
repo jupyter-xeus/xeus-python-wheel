@@ -4,7 +4,7 @@ matrix:
     - sudo: required
       services:
         - docker
-      env: DOCKER_IMAGE=quantstack/manylinux_2010_x86_64-python-dev:latest
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64
            PLAT=manylinux2010_x86_64
     # OSX builds
     - os: osx
