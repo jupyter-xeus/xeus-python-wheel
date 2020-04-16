@@ -24,7 +24,7 @@ ExternalProject_Add(libuuid
     SOURCE_DIR ${EP_SOURCE_DIR}
     BINARY_DIR ${EP_BINARY_DIR}
     INSTALL_DIR ${EP_INSTALL_DIR}
-    CONFIGURE_COMMAND bash configure --disable-all-programs --enable-libuuid
+    CONFIGURE_COMMAND CFLAGS=-fPIC bash configure --disable-all-programs --enable-libuuid
     BUILD_COMMAND make -j ${CPU_COUNT}
     # On some platforms:
     # - If `DESTDIR` is not specified with the install command, libuuid will be

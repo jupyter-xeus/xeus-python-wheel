@@ -27,7 +27,8 @@ setup(
     description='A wheel for xeus-python',
     author='Sylvain Corlay, Johan Mabille',
     license='',
-    packages=[],
+    packages=['xpython'],
+    py_modules=['xpython_launcher'],
     install_requires=['jedi', 'pygments'],
     setup_requires=setup_requires,
     #cmake=['-DHELLO_BUILD_TESTING:BOOL=TRUE',]
