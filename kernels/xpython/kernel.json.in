@@ -1,5 +1,5 @@
 {
-  "display_name": "xpython-test",
+  "display_name": "xpython",
   "argv": [
       "@XPYT_PYTHON_EXECUTABLE_NAME@",
       "-m",
