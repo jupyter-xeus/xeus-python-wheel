@@ -16,8 +16,6 @@ set(BUILD_STATIC_LIBS ON CACHE BOOL "enable static build of xeus" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "disable shared build of xeus" FORCE)
 
 message(STATUS "PYTHON_EXECUTABLE is ${PYTHON_EXECUTABLE}")
-
-set(CMAKE_LIBRARY_PATH "${CMAKE_LIBRARY_PATH} opt/python/cp35-cp35m/lib/")
 message(STATUS "CMAKE_LIBRARY_PATH is ${CMAKE_LIBRARY_PATH}")
 
 # Dependencies
