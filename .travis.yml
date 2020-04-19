@@ -17,6 +17,8 @@ matrix:
       env:
         - PYTHON_VERSION=3.8
 
+language: generic
+
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       docker pull $DOCKER_IMAGE;
