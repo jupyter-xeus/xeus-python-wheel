@@ -45,7 +45,7 @@ test_script:
     - conda install pytest jupyter_kernel_test -y -c conda-forge
 
     # install from wheel
-    - pip install ./xeus_python-0.7.1-%PACKAGE_SUFFIX%-win_amd64.whl
+    - pip install xeus-python --no-index -f .
 
     # run tests from install wheel
     - cd test
