@@ -30,7 +30,7 @@ The following packages must be installed in the environment to build the xeus-py
 To build the wheel in your local environment, clone the repository and run
 
 ```
-pip wheel .
+pip wheel . --verbose
 ```
 
 from the root of the source directory.
