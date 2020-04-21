@@ -1,7 +1,11 @@
-cmake_minimum_required(VERSION 3.4.0)
+cmake_minimum_required(VERSION 3.15.0)
 
+cmake_policy(SET CMP0091 NEW)
 project(wheel)
 set(WHEEL_VERSION 0.1.0)
+
+# Link statically with MSVC runtime
+set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreaded)
 
 # To use cmake modules/functions or FindXXX files:
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
