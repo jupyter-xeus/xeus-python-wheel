@@ -21,6 +21,23 @@ except ImportError:
 
 python_path = sys.executable
 
+def accept_file(name):
+    return not (
+        name.endswith('.a') or      # static libraries
+        name.endswith('.hpp') or    # headers
+        name.endswith('.h') or      # headers
+        name.endswith('.cmake') or  # cmake files
+        name.endswith('.pc') or     # package-config files
+        name.endswith('.txt')       # text files
+    )
+
+def cmake_process_manifest_hook(cmake_manifest):
+    print(cmake_manifest)
+    print('\n\n')
+    cmake_manifest = list(filter(accept_file, cmake_manifest))
+    print(cmake_manifest)
+    return cmake_manifest
+
 setup(
     name="xeus-python",
     version="0.7.1",
@@ -35,6 +52,6 @@ setup(
         'ptvsd>=4.3.2,<5'
     ],
     setup_requires=setup_requires,
-    #cmake=['-DHELLO_BUILD_TESTING:BOOL=TRUE',]
-    cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH='+python_path]
+    cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path],
+    cmake_process_manifest_hook=cmake_process_manifest_hook
 )
