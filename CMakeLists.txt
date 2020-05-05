@@ -62,15 +62,17 @@ if(UNIX AND NOT APPLE)
   endif()
 endif()
 
-configure_file(External_libsodium.cmake.in libsodium-download/CMakeLists.txt @ONLY)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}"  -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} .
-                RESULT_VARIABLE result
-                WORKING_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}/libsodium-download)
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
-                RESULT_VARIABLE result
-                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libsodium-download )
+if(UNIX)
+  configure_file(External_libsodium.cmake.in libsodium-download/CMakeLists.txt @ONLY)
+  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}"  -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} .
+                  RESULT_VARIABLE result
+                  WORKING_DIRECTORY
+                  ${CMAKE_CURRENT_BINARY_DIR}/libsodium-download)
+  execute_process(COMMAND ${CMAKE_COMMAND} --build .
+                  RESULT_VARIABLE result
+                  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libsodium-download )
+endif()
 
 # Fetch and build cmake dependencies
 # ==================================
@@ -86,6 +88,10 @@ set(BUILD_SHARED OFF CACHE BOOL "enable libzmq shared build" FORCE)
 set(BUILD_STATIC ON CACHE BOOL "enable libzmq static build" FORCE)
 set(WITH_DOC OFF CACHE BOOL "do not generate libzmq documentation" FORCE)
 set(BUILD_TESTS OFF CACHE BOOL "do not build libzmq tests" FORCE)
+
+if(WIN32)
+  set(WITH_LIBSODIUM OFF CACHE BOOL "do not use libsodium in zeromq" FORCE)
+endif()
 
 FetchContent_Declare(
   libzmq
