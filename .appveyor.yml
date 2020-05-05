@@ -32,6 +32,7 @@ matrix:
 
 install:
     - conda install cmake perl nasm scikit-build=0.10.0 -y -c conda-forge
+    - conda uninstall libsodium
 
 build_script:
     - pip wheel --verbose .
