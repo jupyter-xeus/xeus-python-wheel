@@ -31,6 +31,8 @@ matrix:
     fast_finish: true
 
 install:
+    - conda create --yes -n build_env python=%PYTHON_VERSION%
+    - activate build_env
     - conda install cmake perl nasm scikit-build=0.10.0 -y -c conda-forge
 
 build_script:
