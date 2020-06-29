@@ -1,5 +1,5 @@
 {
-  "display_name": "xpython",
+  "display_name": "Python @PYTHON_VERSION_MAJOR@.@PYTHON_VERSION_MINOR@ (XPython)",
   "argv": [
       "@XPYT_PYTHON_EXECUTABLE_NAME@",
       "-m",
