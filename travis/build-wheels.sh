@@ -43,6 +43,7 @@ for PYBIN in /opt/python/cp3*/bin; do
     else
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/_internal/cpython-3.8.1/lib
     fi
+    "${PYBIN}/pip" install IPython  # TODO: remove
     "${PYBIN}/pip" install xeus-python --no-index -f /io/wheelhouse
     (cd /io/test; "${PYBIN}/pytest" . -v)
     export PATH=$PATH_BU
