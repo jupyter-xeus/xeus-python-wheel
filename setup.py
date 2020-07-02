@@ -28,7 +28,7 @@ try:
     xeus_version = None
     with open(cmake) as f:
         for line in f:
-            m = re.search(f'XEUS_PYTHON_GIT_TAG\s+([^\s)]+)', line)
+            m = re.search(r'XEUS_PYTHON_GIT_TAG\s+([^\s)]+)', line)
             if m is not None: 
                 xeus_version = m.group(1)
 
