@@ -26,7 +26,7 @@ try:
     import re
     cmake = pathlib.Path(__file__).parent / 'CMakeLists.txt'
     xeus_version = None
-    with open(cmake) as f:
+    with open(str(cmake)) as f:
         for line in f:
             m = re.search(r'XEUS_PYTHON_GIT_TAG\s+([^\s)]+)', line)
             if m is not None: 
