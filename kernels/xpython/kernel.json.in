@@ -7,5 +7,6 @@
       "-f",
       "{connection_file}"
   ],
-  "language": "python"
+  "language": "python",
+  "metadata": { "debugger": true }
 }
