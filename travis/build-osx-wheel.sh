@@ -13,6 +13,7 @@ python --version
 pip install -r dev-requirements.txt
 pip wheel . --verbose -w dist
 
+pip install IPython  # TODO: remove
 pip install --find-links=dist xeus_python
 
 pip install pytest jupyter_kernel_test
