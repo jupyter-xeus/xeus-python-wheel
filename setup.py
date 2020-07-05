@@ -21,6 +21,25 @@ except ImportError:
 
 python_path = sys.executable
 
+try:
+    import pathlib
+    import re
+    cmake = pathlib.Path(__file__).parent / 'CMakeLists.txt'
+    xeus_version = None
+    with open(str(cmake)) as f:
+        for line in f:
+            m = re.search(r'XEUS_PYTHON_GIT_TAG\s+([^\s)]+)', line)
+            if m is not None: 
+                xeus_version = m.group(1)
+
+    if xeus_version is None:
+        raise ValueError("Couldn't find the version in CMakeLists.txt")
+except Exception as e:
+    print('Could not determine the version of xeus_python')
+    print(e)
+    sys.exit(1) 
+
+
 def accept_file(name):
     return not (
         name.endswith('.a') or      # static libraries
@@ -40,7 +59,7 @@ def cmake_process_manifest_hook(cmake_manifest):
 
 setup(
     name="xeus-python",
-    version="0.7.1",
+    version=xeus_version,
     description='A wheel for xeus-python',
     author='Sylvain Corlay, Johan Mabille',
     license='',
