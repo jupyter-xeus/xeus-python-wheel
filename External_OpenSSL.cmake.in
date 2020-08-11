@@ -22,6 +22,9 @@ if (WIN32)
     set(OPENSSL_CONFIG_COMMAND perl configure VC-WIN64A CC=cl RC=rc --prefix=${EP_INSTALL_DIR} --openssldir=${EP_INSTALL_DIR})
     set(OPENSSL_BUILD_COMMAND nmake)
     set(OPENSSL_INSTALL_COMMAND nmake install)
+    # OpenSSL's Makefile fails to install the static builds of libcrypto and libssl on Windows
+    # These library names are only valid from OpenSSL 1.1 and higher.
+    set(OPENSSL_POSTINSTALL_COMMAND copy libcrypto_static.lib ${EP_INSTALL_DIR}/lib/libcrypto_static.lib & copy libssl_static.lib ${EP_INSTALL_DIR}/lib/libssl_static.lib)
 else()
     set(OPENSSL_PATCH_COMMAND "")
     set(OPENSSL_CONFIG_COMMAND CFLAGS=-fPIC ./config --prefix=${EP_INSTALL_DIR})
@@ -31,6 +34,7 @@ else()
     else()
         set(OPENSSL_INSTALL_COMMAND make install_sw)
     endif()
+    set(OPENSSL_POSTINSTALL_COMMAND "")
 endif()
 
 ExternalProject_Add(openssl
@@ -43,5 +47,6 @@ ExternalProject_Add(openssl
     CONFIGURE_COMMAND ${OPENSSL_CONFIG_COMMAND}
     BUILD_COMMAND ${OPENSSL_BUILD_COMMAND}
     INSTALL_COMMAND ${OPENSSL_INSTALL_COMMAND}
+    COMMAND ${OPENSSL_POSTINSTALL_COMMAND}
 )
 
