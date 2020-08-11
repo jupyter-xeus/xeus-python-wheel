@@ -24,8 +24,8 @@ if (WIN32)
     set(OPENSSL_INSTALL_COMMAND nmake install)
     # OpenSSL's Makefile fails to install the static builds of libcrypto and libssl on Windows
     # These library names are only valid from OpenSSL 1.1 and higher.
-    set(OPENSSL_POSTINSTALL_CRYPTO_COMMAND copy libcrypto_static.lib ${EP_INSTALL_DIR}/lib/libcrypto_static.lib)
-    set(OPENSSL_POSTINSTALL_SSL_COMMAND copy libssl_static.lib ${EP_INSTALL_DIR}/lib/libssl_static.lib)
+    set(OPENSSL_POSTINSTALL_CRYPTO_COMMAND ${CMAKE_COMMAND} -E copy libcrypto_static.lib ${EP_INSTALL_DIR}/lib/libcrypto_static.lib)
+    set(OPENSSL_POSTINSTALL_SSL_COMMAND ${CMAKE_COMMAND} -E copy libssl_static.lib ${EP_INSTALL_DIR}/lib/libssl_static.lib)
 else()
     set(OPENSSL_PATCH_COMMAND "")
     set(OPENSSL_CONFIG_COMMAND CFLAGS=-fPIC ./config --prefix=${EP_INSTALL_DIR})
