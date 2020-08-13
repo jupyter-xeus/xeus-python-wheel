@@ -214,12 +214,23 @@ if(WIN32 AND NOT CYGWIN)
 
     find_library(LIB_EAY_DEBUG
       NAMES
+        # When OpenSSL is built with default options, the static library name is suffixed with "_static".
+        # Looking the "libcrypto_static.lib" with a higher priority than "libcrypto.lib" which is the
+        # import library of "libcrypto.dll".
         libcrypto${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libcrypto${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libcrypto${_OPENSSL_STATIC_SUFFIX}d
         libeay32${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libeay32${_OPENSSL_STATIC_SUFFIX}d
         crypto${_OPENSSL_STATIC_SUFFIX}d
+        # When OpenSSL is built with the "-static" option, only the static build is produced,
+        # and it is not suffixed with "_static".
+        libcrypto${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
+        libcrypto${_OPENSSL_MSVC_RT_MODE}d
+        libcryptod
+        libeay32${_OPENSSL_MSVC_RT_MODE}d
+        libeay32d
+        cryptod
       NAMES_PER_DIR
       ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
@@ -228,12 +239,23 @@ if(WIN32 AND NOT CYGWIN)
 
     find_library(LIB_EAY_RELEASE
       NAMES
+        # When OpenSSL is built with default options, the static library name is suffixed with "_static".
+        # Looking the "libcrypto_static.lib" with a higher priority than "libcrypto.lib" which is the
+        # import library of "libcrypto.dll".
         libcrypto${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libcrypto${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libcrypto${_OPENSSL_STATIC_SUFFIX}
         libeay32${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libeay32${_OPENSSL_STATIC_SUFFIX}
         crypto${_OPENSSL_STATIC_SUFFIX}
+        # When OpenSSL is built with the "-static" option, only the static build is produced,
+        # and it is not suffixed with "_static".
+        libcrypto${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
+        libcrypto${_OPENSSL_MSVC_RT_MODE}
+        libcrypto
+        libeay32${_OPENSSL_MSVC_RT_MODE}
+        libeay32
+        crypto
       NAMES_PER_DIR
       ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
@@ -242,12 +264,23 @@ if(WIN32 AND NOT CYGWIN)
 
     find_library(SSL_EAY_DEBUG
       NAMES
+        # When OpenSSL is built with default options, the static library name is suffixed with "_static".
+        # Looking the "libssl_static.lib" with a higher priority than "libssl.lib" which is the
+        # import library of "libssl.dll".
         libssl${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libssl${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libssl${_OPENSSL_STATIC_SUFFIX}d
         ssleay32${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         ssleay32${_OPENSSL_STATIC_SUFFIX}d
         ssl${_OPENSSL_STATIC_SUFFIX}d
+        # When OpenSSL is built with the "-static" option, only the static build is produced,
+        # and it is not suffixed with "_static".
+        libssl${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
+        libssl${_OPENSSL_MSVC_RT_MODE}d
+        libssld
+        ssleay32${_OPENSSL_MSVC_RT_MODE}d
+        ssleay32d
+        ssld
       NAMES_PER_DIR
       ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
@@ -256,12 +289,23 @@ if(WIN32 AND NOT CYGWIN)
 
     find_library(SSL_EAY_RELEASE
       NAMES
+        # When OpenSSL is built with default options, the static library name is suffixed with "_static".
+        # Looking the "libssl_static.lib" with a higher priority than "libssl.lib" which is the
+        # import library of "libssl.dll".
         libssl${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libssl${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libssl${_OPENSSL_STATIC_SUFFIX}
         ssleay32${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         ssleay32${_OPENSSL_STATIC_SUFFIX}
         ssl${_OPENSSL_STATIC_SUFFIX}
+        # When OpenSSL is built with the "-static" option, only the static build is produced,
+        # and it is not suffixed with "_static".
+        libssl${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
+        libssl${_OPENSSL_MSVC_RT_MODE}
+        libssl
+        ssleay32${_OPENSSL_MSVC_RT_MODE}
+        ssleay32
+        ssl
       NAMES_PER_DIR
       ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
