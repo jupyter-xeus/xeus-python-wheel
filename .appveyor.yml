@@ -8,18 +8,18 @@ image:
 
 environment:
   matrix:
-    - CONDA: "C:\\Miniconda36-x64"
-      PYTHON_VERSION: "3.6"
-      CONDA_ARCH: "64"
-      PACKAGE_SUFFIX: "cp36-cp36m"
     - CONDA: "C:\\Miniconda37-x64"
       PYTHON_VERSION: "3.7"
       CONDA_ARCH: "64"
       PACKAGE_SUFFIX: "cp37-cp37m"
-    #- CONDA: "C:\\Miniconda38-x64"
-    #  PYTHON_VERSION: "3.8"
-    #  CONDA_ARCH: "64"
-    #  PACKAGE_SUFFIX: "cp38-cp38m"
+    - CONDA: "C:\\Miniconda38-x64"
+      PYTHON_VERSION: "3.8"
+      CONDA_ARCH: "64"
+      PACKAGE_SUFFIX: "cp38-cp38m"
+    - CONDA: "C:\\Miniconda39-x64"
+      PYTHON_VERSION: "3.9"
+      CONDA_ARCH: "64"
+      PACKAGE_SUFFIX: "cp39-cp39m"
 
 init:
     - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
