@@ -66,7 +66,7 @@ setup(
     packages=['xpython'],
     py_modules=['xpython_launcher'],
     install_requires=[
-        'jedi>=0.15.1,<0.16',
+        'jedi>=0.15.1,<0.18',
         'pygments>=2.3.1,<3',
         'debugpy>=1.1.0'
     ],
