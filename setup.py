@@ -66,9 +66,9 @@ setup(
     packages=['xpython'],
     py_modules=['xpython_launcher'],
     install_requires=[
-        'jedi>=0.15.1,<0.16',
+        'jedi>=0.15.1,<0.18',
         'pygments>=2.3.1,<3',
-        'ptvsd>=4.3.2,<5'
+        'debugpy>=1.1.0'
     ],
     setup_requires=setup_requires,
     cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path],

@@ -32,16 +32,15 @@ for PYBIN in /opt/python/cp3*/bin; do
     export LD_LIBRARY_PATH_BU=$LD_LIBRARY_PATH
     export PATH_BU=$PATH
     export PATH=$PATH:${PYBIN}
-    if [ "${PYBIN}" == "/opt/python/cp34-cp34m/bin" ] || [ "${PYBIN}" == "/opt/python/cp35-cp35m/bin" ]; then
+    if [ "${PYBIN}" == "/opt/python/cp34-cp34m/bin" ] || [ "${PYBIN}" == "/opt/python/cp35-cp35m/bin" ] || [ "${PYBIN}" == "/opt/python/cp36-cp36m/bin" ]; then
         continue
-    elif [ "${PYBIN}" == "/opt/python/cp36-cp36m/bin" ]; then
-        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/_internal/cpython-3.6.10/lib
     elif [ "${PYBIN}" == "/opt/python/cp37-cp37m/bin" ]; then
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/_internal/cpython-3.7.6/lib
-    else
+    elif [ "${PYBIN}" == "/opt/python/cp38-cp38m/bin" ]; then
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/_internal/cpython-3.8.1/lib
     fi
     "${PYBIN}/pip" install IPython  # TODO: remove
+    "${PYBIN}/pip" install debugpy  # TODO: remove
     "${PYBIN}/pip" install xeus-python --no-index -f /io/wheelhouse
     (cd /io/test; "${PYBIN}/pytest" . -v)
     export PATH=$PATH_BU
