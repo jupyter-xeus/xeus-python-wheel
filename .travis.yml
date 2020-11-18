@@ -32,3 +32,12 @@ script:
     else
       bash ./travis/build-osx-wheel.sh; 
     fi
+
+deploy:
+  provider: releases
+  api_key: "$DEPLOY_OAUTH_TOKEN"
+  file_glob: true
+  file: ./wheelhouse/xeus_python*.whl
+  skip_cleanup: true
+  draft: true
+  overwrite: true

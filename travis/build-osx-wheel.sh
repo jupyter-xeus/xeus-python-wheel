@@ -11,10 +11,10 @@ source activate build_env
 python --version
 
 pip install -r dev-requirements.txt
-pip wheel . --verbose -w dist
+pip wheel . --verbose -w wheelhouse
 
 pip install IPython  # TODO: remove
-pip install --find-links=dist xeus_python
+pip install --find-links=wheelhouse xeus_python
 
 pip install pytest jupyter_kernel_test
 

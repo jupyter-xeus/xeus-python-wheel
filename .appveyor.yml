@@ -63,3 +63,16 @@ test_script:
     - cd test
     - pytest . -v
 
+artifacts:
+   - path: 'xeus_python-*.whl'  # find produced xeus_python wheels
+
+deploy:
+    release: Draft
+    provider: GitHub
+    auth_token:
+      secure: oa2Ksc6kYvGfTbxpcvm2FZHP1kknFvQqve7lavJKEkpJW1prEvLnrZipb4SXlMVK
+    artifact: /xeus_python.*\.whl/ 
+    draft: true
+    on:
+      branch: master                 # release from master branch only
+    force_update: true
