@@ -21,7 +21,7 @@ message(STATUS "CMAKE_LIBRARY_PATH is ${CMAKE_LIBRARY_PATH}")
 # Dependencies
 # ============
 
-set(ZEROMQ_GIT_TAG        v4.3.3)
+set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        v4.7.1)
 set(XTL_GIT_TAG           0.7.2)
 set(JSON_GIT_TAG          v3.7.3)
