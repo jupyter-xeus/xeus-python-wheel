@@ -21,14 +21,14 @@ message(STATUS "CMAKE_LIBRARY_PATH is ${CMAKE_LIBRARY_PATH}")
 # Dependencies
 # ============
 
-set(ZEROMQ_GIT_TAG        v4.3.2)
+set(ZEROMQ_GIT_TAG        v4.3.3)
 set(CPPZMQ_GIT_TAG        v4.7.1)
-set(XTL_GIT_TAG           0.6.12)
+set(XTL_GIT_TAG           0.7.2)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          0.25.1)
-set(PYBIND11_GIT_TAG      v2.3)
-set(PYBIND11_JSON_GIT_TAG 0.2.6)
-set(XEUS_PYTHON_GIT_TAG   0.9.1)
+set(XEUS_GIT_TAG          1.0.1)
+set(PYBIND11_GIT_TAG      v2.6.0)
+set(PYBIND11_JSON_GIT_TAG 0.2.9)
+set(XEUS_PYTHON_GIT_TAG   0.11.0)
 
 # pre-build non-cmake dependencies
 # ================================

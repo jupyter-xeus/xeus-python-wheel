@@ -61,14 +61,14 @@ setup(
     name="xeus-python",
     version=xeus_version,
     description='A wheel for xeus-python',
-    author='Sylvain Corlay, Johan Mabille',
+    author='Sylvain Corlay, Johan Mabille, Martin Renou',
     license='',
     packages=['xpython'],
     py_modules=['xpython_launcher'],
     install_requires=[
-        'jedi>=0.15.1,<0.18',
         'pygments>=2.3.1,<3',
-        'debugpy>=1.1.0'
+        'debugpy>=1.1.0',
+        'ipython>=7.20,<8'
     ],
     setup_requires=setup_requires,
     cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path],
