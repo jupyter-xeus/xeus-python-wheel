@@ -13,10 +13,7 @@ python --version
 pip install -r dev-requirements.txt
 pip wheel . --verbose -w wheelhouse
 
-pip install IPython  # TODO: remove
 pip install --find-links=wheelhouse xeus_python
-
-pip install pytest jupyter_kernel_test
 
 cd test
 pytest ./ -v
