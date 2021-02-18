@@ -53,10 +53,9 @@ test_script:
     # create test env
     - conda create --yes -n test_env python=%PYTHON_VERSION% nose
     - activate test_env
-    - conda install pytest jupyter_kernel_test -y -c conda-forge
+    - conda install pytest nbval ipympl -y -c conda-forge
 
     # install from wheel
-    - pip install IPython  # TODO: remove
     - pip install xeus-python --no-index -f .
 
     # run tests from install wheel
@@ -71,7 +70,7 @@ deploy:
     provider: GitHub
     auth_token:
       secure: oa2Ksc6kYvGfTbxpcvm2FZHP1kknFvQqve7lavJKEkpJW1prEvLnrZipb4SXlMVK
-    artifact: /xeus_python.*\.whl/ 
+    artifact: /xeus_python.*\.whl/
     draft: true
     on:
       branch: master                 # release from master branch only
