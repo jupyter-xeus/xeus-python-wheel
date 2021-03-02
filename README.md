@@ -13,12 +13,12 @@ The continuous integration builds and tests wheels for
 Building the manylinux wheels requires `docker`. To build manylinux2010 wheels, clone the repository, and run:
 
 ```bash
-docker run --rm -e PLAT=manylinux2010_x86_64 -v `pwd`:/io quay.io/pypa/manylinux2010_x86_64 /io/travis/build-wheels.sh
+docker run --rm -e PLAT=manylinux2010_x86_64 -v `pwd`:/io quay.io/pypa/manylinux2010_x86_64 /io/scripts/build-wheels.sh
 ```
 
 from the root of the source directory.
 
-Built manylinux wheels for Python 3.5, 3.6, 3.7, and 3.8 are placed into the `wheelhouse` directory.
+Built manylinux wheels for Python 3.7, 3.8, and 3.9 are placed into the `wheelhouse` directory.
 
 ## Building the Windows wheels
 
