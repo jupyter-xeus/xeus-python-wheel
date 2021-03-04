@@ -16,7 +16,7 @@ echo Built wheels:
 ls wheels/*.whl
 
 echo Invoking auditwheel:
-for whl in wheels/xeus_python*.whl; do
+for whl in wheels/xeus_robot*.whl; do
     auditwheel repair "$whl" --plat $PLAT -w /io/wheelhouse/
 done
 
@@ -39,10 +39,8 @@ for PYBIN in /opt/python/cp3*/bin; do
     elif [ "${PYBIN}" == "/opt/python/cp38-cp38m/bin" ]; then
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/_internal/cpython-3.8.1/lib
     fi
-    "${PYBIN}/pip" install IPython  # TODO: remove
-    "${PYBIN}/pip" install debugpy  # TODO: remove
-    "${PYBIN}/pip" install xeus-python --no-index -f /io/wheelhouse
-    (cd /io/test; "${PYBIN}/pytest" . -v)
+    # "${PYBIN}/pip" install xeus-robot --no-index -f /io/wheelhouse
+    # (cd /io/test; "${PYBIN}/pytest" . -v)
     export PATH=$PATH_BU
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH_BU
 done

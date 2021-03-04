@@ -28,7 +28,10 @@ set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          1.0.1)
 set(PYBIND11_GIT_TAG      v2.6.0)
 set(PYBIND11_JSON_GIT_TAG 0.2.9)
-set(XEUS_PYTHON_GIT_TAG   0.11.2)
+# set(XEUS_PYTHON_GIT_TAG   0.11.2)
+set(XEUS_PYTHON_GIT_TAG   6fcaffb9a08f42c21c23415dc199b4c7155d7e0a)
+# set(XEUS_ROBOT_GIT_TAG    0.3.0)
+set(XEUS_ROBOT_GIT_TAG    9aaf0c46a0fa310f3a4983e8268c3f7446bdcb9a)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -208,7 +211,7 @@ if(NOT pybind11_POPULATED)
   FetchContent_Populate(pybind11)
   add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
 endif()
- 
+
 # Pybind11_JSON
 # -------------
 
@@ -235,13 +238,12 @@ message(STATUS "Fetching xeus-python")
 set(XPYTHON_KERNELSPEC_PATH "")
 
 set(XPYT_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
-set(XPYT_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable PyPI warning for xeus-python" FORCE)
 set(XPYT_BUILD_SHARED OFF CACHE BOOL "Do not build xeus-python shared object" FORCE)
 set(XPYT_BUILD_STATIC ON CACHE BOOL "Build xeus-python static library" FORCE)
 set(XPYT_USE_SHARED_XEUS OFF CACHE BOOL "Link statically with libxeus.a" FORCE)
 set(XPYT_USE_SHARED_XEUS_PYTHON OFF CACHE BOOL "Link statically with libxeus-python.a" FORCE)
 set(XPYT_BUILD_XPYTHON_EXECUTABLE OFF CACHE BOOL "Do not build xpython executable" FORCE)
-set(XPYT_BUILD_XPYTHON_EXTENSION ON CACHE BOOL "Build xpython extension module" FORCE)
+set(XPYT_BUILD_XPYTHON_EXTENSION OFF CACHE BOOL "Build xpython extension module" FORCE)
 
 FetchContent_Declare(
   xeus-python
@@ -250,32 +252,59 @@ FetchContent_Declare(
 )
 
 FetchContent_GetProperties(xeus-python)
+
 if(NOT xeus-python_POPULATED)
   FetchContent_Populate(xeus-python)
   add_subdirectory(${xeus-python_SOURCE_DIR} ${xeus-python_BINARY_DIR})
 endif()
 
-# Manually install xpython_extension library in the xpython directory
-install(TARGETS xpython_extension
-        LIBRARY DESTINATION xpython)
+# Xeus-Robot
+# -----------
+
+message(STATUS "Fetching xeus-robot")
+
+set(XROBOT_KERNELSPEC_PATH "")
+
+set(XROB_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
+set(XROB_ENABLE_PYPI_WARNING ON CACHE BOOL "Enable PyPI warning for xrobot" FORCE)
+set(XROB_USE_SHARED_XEUS_PYTHON OFF CACHE BOOL "Link statically with libxeus-python.a" FORCE)
+set(XROB_BUILD_XROBOT_EXECUTABLE OFF CACHE BOOL "Do not build xrobot executable" FORCE)
+set(XROB_BUILD_XROBOT_EXTENSION ON CACHE BOOL "Build xrobot extension module" FORCE)
+
+FetchContent_Declare(
+  xeus-robot
+  GIT_REPOSITORY https://github.com/martinRenou/xeus-robot
+  GIT_TAG ${XEUS_ROBOT_GIT_TAG}
+)
+
+FetchContent_GetProperties(xeus-robot)
+
+if(NOT xeus-robot_POPULATED)
+  FetchContent_Populate(xeus-robot)
+  add_subdirectory(${xeus-robot_SOURCE_DIR} ${xeus-robot_BINARY_DIR})
+endif()
+
+# Manually install xrobot_extension library in the xrobot directory
+install(TARGETS xrobot_extension
+        LIBRARY DESTINATION xrobot)
 
 # Kernelspec
 # ----------
 
-get_filename_component(XPYT_PYTHON_EXECUTABLE_PATH ${PYTHON_EXECUTABLE} REALPATH)
-get_filename_component(XPYT_PYTHON_EXECUTABLE_NAME ${XPYT_PYTHON_EXECUTABLE_PATH} NAME)
-message(STATUS "Python executable name: " ${XPYT_PYTHON_EXECUTABLE_NAME})
+get_filename_component(XROB_PYTHON_EXECUTABLE_PATH ${PYTHON_EXECUTABLE} REALPATH)
+get_filename_component(XROB_PYTHON_EXECUTABLE_NAME ${XROB_PYTHON_EXECUTABLE_PATH} NAME)
+message(STATUS "Python executable name: " ${XROB_PYTHON_EXECUTABLE_NAME})
 
 configure_file (
-    "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xpython/kernel.json.in"
-    "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xpython/kernel.json"
+    "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xrobot/kernel.json.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xrobot/kernel.json"
 )
 
-# Configuration and data directories for jupyter and xeus-python
+# Configuration and data directories for jupyter and xrobot
 set(XJUPYTER_DATA_DIR "share/jupyter" CACHE STRING "Jupyter data directory")
 
-# Install xpython Jupyter kernelspec
-set(XPYT_KERNELSPEC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kernels)
-install(DIRECTORY ${XPYT_KERNELSPEC_DIR}
+# Install xrobot Jupyter kernelspec
+set(XROB_KERNELSPEC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kernels)
+install(DIRECTORY ${XROB_KERNELSPEC_DIR}
         DESTINATION ${XJUPYTER_DATA_DIR}
         PATTERN "*.in" EXCLUDE)

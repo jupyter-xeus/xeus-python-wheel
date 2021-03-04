@@ -1,0 +1,13 @@
+{
+  "display_name": "RobotFramework (XRobot)",
+  "argv": [
+      "@XROB_PYTHON_EXECUTABLE_NAME@",
+      "-m",
+      "xrobot_launcher",
+      "-f",
+      "{connection_file}"
+  ],
+  "codemirror_mode": "robotframework",
+  "language": "robotframework",
+  "metadata": { "debugger": true }
+}

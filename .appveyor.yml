@@ -53,24 +53,24 @@ test_script:
     # create test env
     - conda create --yes -n test_env python=%PYTHON_VERSION% nose
     - activate test_env
-    - conda install pytest nbval ipympl -y -c conda-forge
+    - conda install pytest nbval -y -c conda-forge
 
     # install from wheel
-    - pip install xeus-python --no-index -f .
+    - pip install xeus-robot --no-index -f .
 
     # run tests from install wheel
     - cd test
     - pytest . -v
 
 artifacts:
-   - path: 'xeus_python-*.whl'  # find produced xeus_python wheels
+   - path: 'xeus_robot-*.whl'  # find produced xeus_robot wheels
 
 deploy:
     release: Draft
     provider: GitHub
     auth_token:
       secure: oa2Ksc6kYvGfTbxpcvm2FZHP1kknFvQqve7lavJKEkpJW1prEvLnrZipb4SXlMVK
-    artifact: /xeus_python.*\.whl/
+    artifact: /xeus_robot.*\.whl/
     draft: true
     on:
       branch: master                 # release from master branch only

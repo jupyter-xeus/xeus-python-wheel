@@ -13,7 +13,7 @@ python --version
 pip install -r dev-requirements.txt
 pip wheel . --verbose -w wheelhouse
 
-pip install --find-links=wheelhouse xeus_python
+pip install --find-links=wheelhouse xeus_robot
 
 cd test
 pytest ./ -v

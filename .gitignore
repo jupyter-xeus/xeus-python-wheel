@@ -45,4 +45,4 @@ coverage.xml
 skbuild/cmake_test_compile/*
 
 # Generated kernelspec
-kernels/xpython/kernel.json
+kernels/xrobot/kernel.json
