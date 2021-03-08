@@ -69,3 +69,59 @@ jobs:
       with:
         name: wheelhouse
         path: wheelhouse/xeus_python*.whl
+
+  test-wheel:
+    runs-on: ${{ matrix.os }}-latest
+    needs: [linux, osx]
+
+    strategy:
+      matrix:
+        os: [ubuntu, macos]
+        PYTHON_VERSION: [3.7, 3.8, 3.9]
+        include:
+          - PYTHON_VERSION: 3.7
+            os: ubuntu
+            whl: 'xeus_python-*-cp37*linux*.whl'
+          - PYTHON_VERSION: 3.8
+            os: ubuntu
+            whl: 'xeus_python-*-cp38*linux*.whl'
+          - PYTHON_VERSION: 3.9
+            os: ubuntu
+            whl: 'xeus_python-*-cp39*linux*.whl'
+          - PYTHON_VERSION: 3.7
+            os: macos
+            whl: 'xeus_python-*-cp37*macos*.whl'
+          - PYTHON_VERSION: 3.8
+            os: macos
+            whl: 'xeus_python-*-cp38*macos*.whl'
+          - PYTHON_VERSION: 3.9
+            os: macos
+            whl: 'xeus_python-*-cp39*macos*.whl'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: wheelhouse
+        path: ./wheelhouse
+
+    - name: Setup conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ matrix.PYTHON_VERSION }}
+        mamba-version: "*"
+        auto-activate-base: false
+        channels: conda-forge
+
+    - name: Install deps
+      run: mamba install -c conda-forge pip pytest nbval ipympl
+
+    - name: Install wheel
+      run: |
+        cd wheelhouse
+        pip install -vv ${{ matrix.whl }}
+
+    - name: Run test
+      run: pytest test -vv
