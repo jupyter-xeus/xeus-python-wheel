@@ -12,8 +12,3 @@ python --version
 
 pip install -r dev-requirements.txt
 pip wheel . --verbose -w wheelhouse
-
-pip install --find-links=wheelhouse xeus_python
-
-cd test
-pytest ./ -v
