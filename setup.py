@@ -29,7 +29,7 @@ try:
     with open(str(cmake)) as f:
         for line in f:
             m = re.search(r'XEUS_PYTHON_GIT_TAG\s+([^\s)]+)', line)
-            if m is not None: 
+            if m is not None:
                 xeus_version = m.group(1)
 
     if xeus_version is None:
@@ -37,12 +37,13 @@ try:
 except Exception as e:
     print('Could not determine the version of xeus_python')
     print(e)
-    sys.exit(1) 
+    sys.exit(1)
 
 
 def accept_file(name):
     return not (
         name.endswith('.a') or      # static libraries
+        name.endswith('.lib') or    # lib files
         name.endswith('.hpp') or    # headers
         name.endswith('.h') or      # headers
         name.endswith('.cmake') or  # cmake files
