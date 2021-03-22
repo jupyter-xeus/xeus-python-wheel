@@ -28,7 +28,7 @@ set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          1.0.1)
 set(PYBIND11_GIT_TAG      v2.6.0)
 set(PYBIND11_JSON_GIT_TAG 0.2.9)
-set(XEUS_PYTHON_GIT_TAG   0.11.2)
+set(XEUS_PYTHON_GIT_TAG   0.12.0)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -208,7 +208,7 @@ if(NOT pybind11_POPULATED)
   FetchContent_Populate(pybind11)
   add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
 endif()
- 
+
 # Pybind11_JSON
 # -------------
 
