@@ -3,7 +3,7 @@ if __name__ == '__main__':
         import argparse
         parser = argparse.ArgumentParser()
         parser.add_argument('-f', help='Jupyter kernel connection filename')
-        args = parser.parse_args()
+        args, unknown = parser.parse_known_args()
         return args.f
 
     from xpython import launch as _xpython_launch
