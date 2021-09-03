@@ -88,6 +88,7 @@ set(BUILD_SHARED OFF CACHE BOOL "enable libzmq shared build" FORCE)
 set(BUILD_STATIC ON CACHE BOOL "enable libzmq static build" FORCE)
 set(WITH_DOC OFF CACHE BOOL "do not generate libzmq documentation" FORCE)
 set(BUILD_TESTS OFF CACHE BOOL "do not build libzmq tests" FORCE)
+set(ENABLE_CPACK OFF CACHE BOOL "disable cpack rules" FORCE)
 
 if(WIN32)
   set(WITH_LIBSODIUM OFF CACHE BOOL "do not use libsodium in zeromq" FORCE)
