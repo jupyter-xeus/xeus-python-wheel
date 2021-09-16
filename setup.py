@@ -69,7 +69,8 @@ setup(
     install_requires=[
         'pygments>=2.3.1,<3',
         'debugpy>=1.1.0',
-        'ipython>=7.20,<8'
+        'ipython>=7.20,<8',
+        'xeus-python-shell >=0.1.5,<0.2'
     ],
     setup_requires=setup_requires,
     cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path],
