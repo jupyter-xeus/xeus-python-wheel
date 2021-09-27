@@ -16,7 +16,7 @@ echo Built wheels:
 ls wheels/*.whl
 
 echo Invoking auditwheel:
-for whl in wheels/xeus_python*.whl; do
+for whl in wheels/xeus_python-*.whl; do
     auditwheel repair "$whl" --plat $PLAT -w /io/wheelhouse/
 done
 
