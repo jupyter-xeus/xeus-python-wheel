@@ -27,8 +27,8 @@ set(XTL_GIT_TAG           0.7.2)
 set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          2.0.0)
 set(PYBIND11_GIT_TAG      v2.6.0)
-set(PYBIND11_JSON_GIT_TAG 0.2.9)
-set(XEUS_PYTHON_GIT_TAG   0.13.0)
+set(PYBIND11_JSON_GIT_TAG 0.2.11)
+set(XEUS_PYTHON_GIT_TAG   0.13.1)
 
 # pre-build non-cmake dependencies
 # ================================

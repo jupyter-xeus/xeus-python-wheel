@@ -51,12 +51,14 @@ def accept_file(name):
         name.endswith('.txt')       # text files
     )
 
+
 def cmake_process_manifest_hook(cmake_manifest):
     print(cmake_manifest)
     print('\n\n')
     cmake_manifest = list(filter(accept_file, cmake_manifest))
     print(cmake_manifest)
     return cmake_manifest
+
 
 setup(
     name="xeus-python",
@@ -69,7 +71,6 @@ setup(
     install_requires=[
         'pygments>=2.3.1,<3',
         'debugpy>=1.1.0',
-        'ipython>=7.20,<8',
         'xeus-python-shell >=0.1.5,<0.2'
     ],
     setup_requires=setup_requires,
