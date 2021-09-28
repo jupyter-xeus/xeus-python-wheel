@@ -4,8 +4,6 @@ platform:
     - x64
 
 image:
-    - Visual Studio 2015
-    - Visual Studio 2017
     - Visual Studio 2019
 
 environment:
@@ -20,10 +18,7 @@ environment:
       PACKAGE_SUFFIX: "cp38-cp38m"
 
 init:
-    - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2015" set VCVARPATH="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
-    - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2015" set VCARGUMENT=%PLATFORM%
-    - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2017" set VCVARPATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
-    - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2019" set VCVARPATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+    - set VCVARPATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
     - echo "%VCVARPATH% %VCARGUMENT%"
     - "%VCVARPATH% %VCARGUMENT%"
     - SET PATH=%CONDA%;%CONDA%\Scripts;%CONDA%\Library\bin;%CONDA%\bin;%PATH%
@@ -32,12 +27,6 @@ init:
 
 matrix:
     fast_finish: true
-    # Miniconda38 is not available on Visual Studio 2015 & 2017 images
-    exclude:
-        - image: Visual Studio 2015
-          CONDA: "C:\\Miniconda38-x64"
-        - image: Visual Studio 2017
-          CONDA: "C:\\Miniconda38-x64"
 
 install:
     - conda create --yes -n build_env python=%PYTHON_VERSION%
