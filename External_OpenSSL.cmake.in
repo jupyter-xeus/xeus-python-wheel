@@ -7,6 +7,10 @@ set(EP_SOURCE_DIR ${CMAKE_BINARY_DIR}/openssl-src)
 set(EP_BINARY_DIR ${CMAKE_BINARY_DIR}/openssl-src)
 set(EP_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
 
+set(openssl_TAG @openssl_TAG@)
+set(openssl_SHA256 @openssl_SHA256@)
+set(openssl_URL @openssl_URL@)
+
 include(ProcessorCount)
 ProcessorCount(CPU_COUNT)
 if(CPU_COUNT EQUAL 0)
