@@ -33,6 +33,16 @@ set(XEUS_PYTHON_GIT_TAG   0.13.2)
 # pre-build non-cmake dependencies
 # ================================
 
+if (UNIX AND Python_VERSION_MAJOR EQUAL 3 AND Python_VERSION_MINOR GREATER 7)
+  set(openssl_TAG 1.1.1l)
+  set(openssl_SHA256 0b7a3e5e59c34827fe0c3a74b7ec8baef302b98fa80088d7f9153aa16fa76bd1)
+  set(openssl_URL "http://www.openssl.org/source/openssl-${openssl_TAG}.tar.gz")
+else()
+  set(openssl_TAG 1.1.1d)
+  set(openssl_SHA256 1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2)
+  set(openssl_URL "http://www.openssl.org/source/old/1.1.1/openssl-${openssl_TAG}.tar.gz")
+endif()
+
 configure_file(External_OpenSSL.cmake.in OpenSSL-download/CMakeLists.txt @ONLY)
 configure_file(bcryptgen.patch.in OpenSSL-download/bcryptgen.patch @ONLY)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
