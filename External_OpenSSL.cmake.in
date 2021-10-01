@@ -7,9 +7,9 @@ set(EP_SOURCE_DIR ${CMAKE_BINARY_DIR}/openssl-src)
 set(EP_BINARY_DIR ${CMAKE_BINARY_DIR}/openssl-src)
 set(EP_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
 
-set(openssl_TAG 1.1.1d)
-set(openssl_SHA256 1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2)
-set(openssl_URL "http://www.openssl.org/source/old/1.1.1/openssl-${openssl_TAG}.tar.gz")
+set(openssl_TAG 1.1.1l)
+set(openssl_SHA256 0b7a3e5e59c34827fe0c3a74b7ec8baef302b98fa80088d7f9153aa16fa76bd1)
+set(openssl_URL "http://www.openssl.org/source/openssl-${openssl_TAG}.tar.gz")
 
 include(ProcessorCount)
 ProcessorCount(CPU_COUNT)
