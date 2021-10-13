@@ -28,7 +28,7 @@ set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          2.1.1)
 set(PYBIND11_GIT_TAG      v2.7.1)
 set(PYBIND11_JSON_GIT_TAG 0.2.11)
-set(XEUS_PYTHON_GIT_TAG   0.13.2)
+set(XEUS_PYTHON_GIT_TAG   0.13.3)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -247,8 +247,8 @@ set(XPYT_BUILD_XPYTHON_EXTENSION ON CACHE BOOL "Build xpython extension module" 
 
 FetchContent_Declare(
   xeus-python
-  GIT_REPOSITORY https://github.com/trungleduc/xeus-python
-  GIT_TAG update-xpython-launcher
+  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
+  GIT_TAG ${XEUS_PYTHON_GIT_TAG}
 )
 
 FetchContent_GetProperties(xeus-python)
