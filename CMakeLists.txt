@@ -273,6 +273,11 @@ configure_file (
     "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xpython/kernel.json"
 )
 
+configure_file (
+    "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xpython-raw/kernel.json.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xpython-raw/kernel.json"
+)
+
 # Configuration and data directories for jupyter and xeus-python
 set(XJUPYTER_DATA_DIR "share/jupyter" CACHE STRING "Jupyter data directory")
 
