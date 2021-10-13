@@ -35,6 +35,7 @@ set(XEUS_PYTHON_GIT_TAG   0.13.2)
 
 configure_file(External_OpenSSL.cmake.in OpenSSL-download/CMakeLists.txt @ONLY)
 configure_file(bcryptgen.patch.in OpenSSL-download/bcryptgen.patch @ONLY)
+configure_file(commoncrypto.patch.in OpenSSL-download/commoncrypto.patch @ONLY)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} .
                 RESULT_VARIABLE result
