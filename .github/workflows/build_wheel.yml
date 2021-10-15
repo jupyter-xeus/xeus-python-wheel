@@ -51,20 +51,23 @@ jobs:
 
     strategy:
       fail-fast: false
+      matrix:
+        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10"]
 
-    env:
-      DOCKER_IMAGE: quay.io/pypa/manylinux2010_x86_64
-      PLAT: manylinux2010_x86_64
+    container:
+        image: "quay.io/pypa/manylinux2014_x86_64"
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Pull docker image
-      run: docker pull $DOCKER_IMAGE
-
     - name: Build wheel
-      run: docker run --rm -e PLAT=$PLAT -v `pwd`:/io $DOCKER_IMAGE /io/scripts/build-wheels.sh
+      run: |
+        pyver=`echo '${{ matrix.PYTHON_VERSION }}' | tr -d '.'`
+        pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
+        export PATH=$pypath:$PATH
+        python -m pip wheel --verbose . -w wheelhouse_dirty
+        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux2014_x86_64 -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
@@ -99,12 +102,7 @@ jobs:
       shell: cmd
       run: |
         call "c:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-        pip wheel --verbose .
-
-    - name: Move wheels
-      run: |
-        mkdir wheelhouse
-        mv *.whl wheelhouse
+        pip wheel --verbose . -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
@@ -183,7 +181,9 @@ jobs:
       run: ls wheelhouse
 
     - name: Install wheel
-      run: python -m pip install -vv $(find . -type f -iname ${{ matrix.whl }})
+      run: |
+        WHEEL=$(find . -type f -iname ${{ matrix.whl }})
+        python -m pip install -vv ${WHEEL}
       working-directory: wheelhouse
 
     - name: Run test
