@@ -28,7 +28,7 @@ set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          2.1.1)
 set(PYBIND11_GIT_TAG      v2.7.1)
 set(PYBIND11_JSON_GIT_TAG 0.2.11)
-set(XEUS_PYTHON_GIT_TAG   0.13.2)
+set(XEUS_PYTHON_GIT_TAG   0.13.3)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -271,6 +271,11 @@ message(STATUS "Python executable name: " ${XPYT_PYTHON_EXECUTABLE_NAME})
 configure_file (
     "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xpython/kernel.json.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xpython/kernel.json"
+)
+
+configure_file (
+    "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xpython-raw/kernel.json.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xpython-raw/kernel.json"
 )
 
 # Configuration and data directories for jupyter and xeus-python

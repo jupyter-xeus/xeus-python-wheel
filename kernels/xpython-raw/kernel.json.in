@@ -1,0 +1,13 @@
+{
+  "display_name": "Python @PYTHON_VERSION_MAJOR@.@PYTHON_VERSION_MINOR@ (XPython Raw)",
+  "argv": [
+      "@XPYT_PYTHON_EXECUTABLE_NAME@",
+      "-m",
+      "xpython_launcher",
+      "-f",
+      "{connection_file}",
+      "--raw"
+  ],
+  "language": "python",
+  "metadata": { "debugger": false }
+}
