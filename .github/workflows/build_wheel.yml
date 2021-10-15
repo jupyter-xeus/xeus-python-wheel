@@ -27,6 +27,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Install Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.PYTHON_VERSION }}
+
     - name: Setup xcode
       uses: maxim-lobanov/setup-xcode@v1
       with:
@@ -35,7 +40,7 @@ jobs:
     - name: Build wheel
       run: |
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
-        bash ./scripts/build-osx-wheel.sh
+        python -m pip wheel . --verbose -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
