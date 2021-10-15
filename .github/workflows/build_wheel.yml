@@ -102,7 +102,7 @@ jobs:
       run: mamba install cmake perl nasm scikit-build
 
     - name: Build wheel
-      shell: cmd
+      shell: cmd /C CALL {0}
       run: |
         call "c:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
         pip wheel --verbose .
