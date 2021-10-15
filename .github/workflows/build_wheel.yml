@@ -207,10 +207,6 @@ jobs:
 
     steps:
 
-    - name: Echo event action
-      shell: bash
-      run: ${{ github.event.action }}
-
     - uses: actions/download-artifact@v2
       with:
         name: wheelhouse
