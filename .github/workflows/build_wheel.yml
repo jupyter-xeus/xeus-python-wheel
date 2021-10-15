@@ -186,6 +186,7 @@ jobs:
       run: ls wheelhouse
 
     - name: Install wheel
+      shell: bash
       run: |
         WHEEL=$(find . -type f -iname ${{ matrix.whl }})
         python -m pip install -vv ${WHEEL}
