@@ -40,10 +40,14 @@ jobs:
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
         bash ./scripts/build-osx-wheel.sh
 
+    - name: List wheels
+      run: ls wheelhouse
+
     - uses: actions/upload-artifact@v2
       with:
         name: wheelhouse
-        path: wheelhouse/xeus_python*.whl
+        path: wheelhouse/xeus_python-*.whl
+        if-no-files-found: error
 
   linux:
     runs-on: ubuntu-latest
@@ -65,14 +69,61 @@ jobs:
     - name: Build wheel
       run: docker run --rm -e PLAT=$PLAT -v `pwd`:/io $DOCKER_IMAGE /io/scripts/build-wheels.sh
 
+    - name: List wheels
+      run: ls wheelhouse
+
     - uses: actions/upload-artifact@v2
       with:
         name: wheelhouse
-        path: wheelhouse/xeus_python*.whl
+        path: wheelhouse/xeus_python-*.whl
+        if-no-files-found: error
+
+  windows:
+    runs-on: windows-2019
+
+    strategy:
+      fail-fast: false
+      matrix:
+        PYTHON_VERSION: [3.7, 3.8, 3.9]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ matrix.PYTHON_VERSION }}
+        mamba-version: "*"
+        auto-activate-base: true
+        channels: conda-forge
+
+    - name: Install dependencies
+      run: mamba install cmake perl nasm scikit-build
+
+    - name: Build wheel
+      shell: cmd /C CALL {0}
+      run: |
+        call "c:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+        pip wheel --verbose .
+
+    - name: Move wheels
+      run: |
+        mkdir wheelhouse
+        mv *.whl wheelhouse
+
+    - name: List wheels
+      run: ls wheelhouse
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: wheelhouse
+        path: wheelhouse/xeus_python-*.whl
+        if-no-files-found: error
 
   test-wheel:
     runs-on: ${{ matrix.os }}-latest
-    needs: [linux, osx]
+    needs: [linux, osx, windows]
 
     strategy:
       matrix:
@@ -97,6 +148,15 @@ jobs:
           - PYTHON_VERSION: 3.9
             os: macos
             whl: 'xeus_python-*-cp39*macos*.whl'
+          - PYTHON_VERSION: 3.7
+            os: windows
+            whl: 'xeus_python-*-cp37*win*.whl'
+          - PYTHON_VERSION: 3.8
+            os: windows
+            whl: 'xeus_python-*-cp38*win*.whl'
+          - PYTHON_VERSION: 3.9
+            os: windows
+            whl: 'xeus_python-*-cp39*win*.whl'
 
     steps:
     - name: Checkout
@@ -116,12 +176,11 @@ jobs:
         channels: conda-forge
 
     - name: Install deps
-      run: mamba install -c conda-forge pip pytest nbval ipympl
+      run: mamba install pip pytest nbval ipympl
 
     - name: Install wheel
-      run: |
-        cd wheelhouse
-        pip install -vv ${{ matrix.whl }}
+      run: pip install -vv ${{ matrix.whl }}
+      working-directory: wheelhouse
 
     - name: Run test
       run: pytest test -vv
