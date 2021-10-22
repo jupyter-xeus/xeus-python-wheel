@@ -247,8 +247,8 @@ set(XPYT_BUILD_XPYTHON_EXTENSION ON CACHE BOOL "Build xpython extension module" 
 
 FetchContent_Declare(
   xeus-python
-  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-python
-  GIT_TAG ${XEUS_PYTHON_GIT_TAG}
+  GIT_REPOSITORY https://github.com/martinRenou/xeus-python
+  GIT_TAG "kill_handlers_xpython_extension"
 )
 
 FetchContent_GetProperties(xeus-python)
