@@ -62,11 +62,13 @@ jobs:
         PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10"]
 
     container:
-        image: "quay.io/pypa/manylinux2014_x86_64"
+        image: "quay.io/pypa/manylinux2010_x86_64"
 
     steps:
+    # We need checkout v1, as checkout v2 does not work for the manylinux2010 image
+    # See https://github.com/actions/runner/issues/334
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v1
 
     - name: Build wheel
       run: |
@@ -74,16 +76,19 @@ jobs:
         pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
         export PATH=$pypath:$PATH
         python -m pip wheel --verbose . -w wheelhouse_dirty
-        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux2014_x86_64 -w wheelhouse
+        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux2010_x86_64 -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v2
+    - name: Get wheel name
+      run: echo "WHEEL=$(find wheelhouse -type f -iname 'xeus_python-*.whl')" >> $GITHUB_ENV
+
+    # We need upload-artifact v1, same issue as for checkout v2
+    - uses: actions/upload-artifact@v1
       with:
         name: wheelhouse
-        path: wheelhouse/xeus_python-*.whl
-        if-no-files-found: error
+        path: ${{ env.WHEEL }}
 
   windows:
     runs-on: windows-2019
