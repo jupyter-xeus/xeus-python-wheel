@@ -70,8 +70,7 @@ setup(
     py_modules=['xpython_launcher'],
     install_requires=[
         'pygments>=2.3.1,<3',
-        'debugpy>=1.1.0',
-        'xeus-python-shell >=0.4.1,<0.5'
+        'xeus-python-shell[ipython]>=0.5,<0.6'
     ],
     setup_requires=setup_requires,
     cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path],
