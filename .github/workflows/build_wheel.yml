@@ -41,7 +41,7 @@ jobs:
     - name: Build wheels
       run: |
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
-        if [ ${{ matrix.ARCH == "arm64" }} ]; then
+        if [ ${{ matrix.ARCH }} == "arm64" ]; then
           export _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
           export ARCHFLAGS="-arch arm64"
         fi
