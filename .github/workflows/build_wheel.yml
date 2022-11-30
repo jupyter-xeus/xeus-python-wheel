@@ -63,10 +63,9 @@ jobs:
       fail-fast: false
       matrix:
         PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-        ARCH: ["x86_64", "aarch64"]
 
     container:
-        image: "quay.io/pypa/manylinux_2_24_${{ matrix.ARCH }}"
+        image: "quay.io/pypa/manylinux_2_24_x86_64"
 
     steps:
     - name: Checkout
@@ -139,19 +138,19 @@ jobs:
         include:
           - PYTHON_VERSION: "3.7"
             os: ubuntu
-            whl: 'xeus_python-*-cp37*linux*x86_64.whl'
+            whl: 'xeus_python-*-cp37*linux*.whl'
           - PYTHON_VERSION: "3.8"
             os: ubuntu
-            whl: 'xeus_python-*-cp38*linux*x86_64.whl'
+            whl: 'xeus_python-*-cp38*linux*.whl'
           - PYTHON_VERSION: "3.9"
             os: ubuntu
-            whl: 'xeus_python-*-cp39*linux*x86_64.whl'
+            whl: 'xeus_python-*-cp39*linux*.whl'
           - PYTHON_VERSION: "3.10"
             os: ubuntu
-            whl: 'xeus_python-*-cp310*linux*x86_64.whl'
+            whl: 'xeus_python-*-cp310*linux*.whl'
           - PYTHON_VERSION: "3.11"
             os: ubuntu
-            whl: 'xeus_python-*-cp311*linux*x86_64.whl'
+            whl: 'xeus_python-*-cp311*linux*.whl'
           - PYTHON_VERSION: "3.7"
             os: macos
             whl: 'xeus_python-*-cp37*macos*x86_64.whl'
