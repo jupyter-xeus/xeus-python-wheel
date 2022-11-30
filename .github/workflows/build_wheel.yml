@@ -19,6 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        ARCH: ["x86_64", "arm64"]
 
     env:
       PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
@@ -40,9 +41,10 @@ jobs:
     - name: Build wheels
       run: |
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
-        python -m pip wheel . --verbose -w wheelhouse
-        export _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
-        export ARCHFLAGS="-arch arm64"
+        if [ ${{ matrix.arch == "arm64 "}}]; then
+          export _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
+          export ARCHFLAGS="-arch arm64"
+        fi
         python -m pip wheel . --verbose -w wheelhouse
 
     - name: List wheels
@@ -54,51 +56,16 @@ jobs:
         path: wheelhouse/xeus_python-*.whl
         if-no-files-found: error
 
-  linux_x86_64:
+  linux:
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-
+        ARCH: ["x86_64", "aarch64"]
     container:
-        image: "quay.io/pypa/manylinux_2_24_x86_64"
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    - name: Build wheel
-      run: |
-        pyver=`echo '${{ matrix.PYTHON_VERSION }}' | tr -d '.'`
-        pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
-        export PATH=$pypath:$PATH
-        python -m pip wheel --verbose . -w wheelhouse_dirty
-        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_24_x86_64 -w wheelhouse
-
-    - name: List wheels
-      run: ls wheelhouse
-
-    - name: Get wheel name
-      run: echo "WHEEL=$(find wheelhouse -type f -iname 'xeus_python-*.whl')" >> $GITHUB_ENV
-
-    # We need upload-artifact v1, same issue as for checkout v2
-    - uses: actions/upload-artifact@v1
-      with:
-        name: wheelhouse
-        path: ${{ env.WHEEL }}
-
-  linux_aarch64:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-
-    container:
-        image: "quay.io/pypa/manylinux_2_24_aarch64"
+        image: "quay.io/pypa/manylinux_2_24_${{ matrix.ARCH }}"
 
     steps:
     - name: Checkout
@@ -115,7 +82,7 @@ jobs:
         pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
         export PATH=$pypath:$PATH
         python -m pip wheel --verbose . -w wheelhouse_dirty
-        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_24_aarch64 -w wheelhouse
+        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_24_x86_64 -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
