@@ -90,6 +90,7 @@ jobs:
         path: ${{ env.WHEEL }}
 
   linux_aarch64:
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
