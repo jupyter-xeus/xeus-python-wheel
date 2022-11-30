@@ -77,7 +77,7 @@ jobs:
         pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
         export PATH=$pypath:$PATH
         python -m pip wheel --verbose . -w wheelhouse_dirty
-        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux2010_x86_64 -w wheelhouse
+        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_24_x86_64 -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
