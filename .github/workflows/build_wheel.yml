@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10"]
+        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
     env:
       PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
@@ -63,7 +63,7 @@ jobs:
         PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
     container:
-        image: "quay.io/pypa/manylinux2010_x86_64"
+        image: "quay.io/pypa/manylinux_2_24_x86_64"
 
     steps:
     # We need checkout v1, as checkout v2 does not work for the manylinux2010 image
