@@ -40,17 +40,19 @@ jobs:
 
     - name: Build wheel
       run: |
+        pip install delocate
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
         if [ ${{ matrix.ARCH }} == "arm64" ]; then
           export _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
           export ARCHFLAGS="-arch arm64"
         fi
-        python -m pip wheel . --verbose -w wheelhouse
+        python -m pip wheel . --verbose -w wheelhouse_dirty
+        delocate-wheel -w wheelhouse wheelhouse_dirty/xeus_python-*.whl
 
     - name: List wheels
       run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: wheelhouse
         path: wheelhouse/xeus_python-*.whl
@@ -85,8 +87,7 @@ jobs:
     - name: Get wheel name
       run: echo "WHEEL=$(find wheelhouse -type f -iname 'xeus_python-*.whl')" >> $GITHUB_ENV
 
-    # We need upload-artifact v1, same issue as for checkout v2
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v3
       with:
         name: wheelhouse
         path: ${{ env.WHEEL }}
@@ -120,7 +121,7 @@ jobs:
     - name: List wheels
       run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: wheelhouse
         path: wheelhouse/xeus_python-*.whl
@@ -184,15 +185,15 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
       with:
         name: wheelhouse
         path: ./wheelhouse
 
     - name: Install Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.PYTHON_VERSION }}
 
@@ -222,7 +223,7 @@ jobs:
 
     steps:
 
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
       with:
         name: wheelhouse
         path: ./wheelhouse
