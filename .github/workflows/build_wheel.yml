@@ -38,7 +38,7 @@ jobs:
     - name: Setup xcode
       uses: maxim-lobanov/setup-xcode@v1
 
-    - name: Build wheels
+    - name: Build wheel
       run: |
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
         if [ ${{ matrix.ARCH }} == "arm64" ]; then
@@ -64,17 +64,13 @@ jobs:
       matrix:
         PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
         ARCH: ["x86_64", "aarch64"]
+
     container:
         image: "quay.io/pypa/manylinux_2_24_${{ matrix.ARCH }}"
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
-      with:
-        platforms: all
 
     - name: Build wheel
       run: |
