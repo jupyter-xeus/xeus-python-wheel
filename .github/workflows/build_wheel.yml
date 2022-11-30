@@ -37,7 +37,7 @@ jobs:
     - name: Setup xcode
       uses: maxim-lobanov/setup-xcode@v1
 
-    - name: Build wheel
+    - name: Build wheels
       run: |
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
         python -m pip wheel . --verbose -w wheelhouse
@@ -54,7 +54,7 @@ jobs:
         path: wheelhouse/xeus_python-*.whl
         if-no-files-found: error
 
-  linux:
+  linux_x86_64:
     runs-on: ubuntu-latest
 
     strategy:
@@ -66,10 +66,8 @@ jobs:
         image: "quay.io/pypa/manylinux_2_24_x86_64"
 
     steps:
-    # We need checkout v1, as checkout v2 does not work for the manylinux2010 image
-    # See https://github.com/actions/runner/issues/334
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3
 
     - name: Build wheel
       run: |
@@ -78,6 +76,45 @@ jobs:
         export PATH=$pypath:$PATH
         python -m pip wheel --verbose . -w wheelhouse_dirty
         auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_24_x86_64 -w wheelhouse
+
+    - name: List wheels
+      run: ls wheelhouse
+
+    - name: Get wheel name
+      run: echo "WHEEL=$(find wheelhouse -type f -iname 'xeus_python-*.whl')" >> $GITHUB_ENV
+
+    # We need upload-artifact v1, same issue as for checkout v2
+    - uses: actions/upload-artifact@v1
+      with:
+        name: wheelhouse
+        path: ${{ env.WHEEL }}
+
+  linux_aarch64:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+
+    container:
+        image: "quay.io/pypa/manylinux_2_24_aarch64"
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: all
+
+    - name: Build wheel
+      run: |
+        pyver=`echo '${{ matrix.PYTHON_VERSION }}' | tr -d '.'`
+        pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
+        export PATH=$pypath:$PATH
+        python -m pip wheel --verbose . -w wheelhouse_dirty
+        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_24_aarch64 -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
@@ -138,22 +175,22 @@ jobs:
         include:
           - PYTHON_VERSION: "3.7"
             os: ubuntu
-            whl: 'xeus_python-*-cp37*linux*.whl'
+            whl: 'xeus_python-*-cp37*linux*x86_64.whl'
           - PYTHON_VERSION: "3.8"
             os: ubuntu
-            whl: 'xeus_python-*-cp38*linux*.whl'
+            whl: 'xeus_python-*-cp38*linux*x86_64.whl'
           - PYTHON_VERSION: "3.9"
             os: ubuntu
-            whl: 'xeus_python-*-cp39*linux*.whl'
+            whl: 'xeus_python-*-cp39*linux*x86_64.whl'
           - PYTHON_VERSION: "3.10"
             os: ubuntu
-            whl: 'xeus_python-*-cp310*linux*.whl'
+            whl: 'xeus_python-*-cp310*linux*x86_64.whl'
           - PYTHON_VERSION: "3.11"
             os: ubuntu
-            whl: 'xeus_python-*-cp311*linux*.whl'
+            whl: 'xeus_python-*-cp311*linux*x86_64.whl'
           - PYTHON_VERSION: "3.7"
             os: macos
-            whl: 'xeus_python-*-cp37*macos*.whl'
+            whl: 'xeus_python-*-cp37*macos*x86_64.whl'
           - PYTHON_VERSION: "3.8"
             os: macos
             whl: 'xeus_python-*-cp38*macos*x86_64.whl'
