@@ -40,6 +40,7 @@ jobs:
 
     - name: Build wheel
       run: |
+        set -eux
         pip install delocate
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
         if [ ${{ matrix.ARCH }} == "arm64" ]; then
@@ -47,7 +48,7 @@ jobs:
           export ARCHFLAGS="-arch arm64"
         fi
         python -m pip wheel . --verbose -w wheelhouse_dirty
-        delocate-wheel -w wheelhouse wheelhouse_dirty/xeus_python-*.whl
+        delocate-wheel -w wheelhouse --require-archs=${{ matrix.arch }} -v wheelhouse_dirty/xeus_python-*.whl
 
     - name: List wheels
       run: ls wheelhouse
@@ -75,6 +76,7 @@ jobs:
 
     - name: Build wheel
       run: |
+        set -eux
         pyver=`echo '${{ matrix.PYTHON_VERSION }}' | tr -d '.'`
         pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
         export PATH=$pypath:$PATH
