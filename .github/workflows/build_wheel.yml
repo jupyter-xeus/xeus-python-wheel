@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        PYTHON_VERSION: ["3.10"]
         ARCH: ["arm64"]
 
     env:
@@ -61,161 +61,161 @@ jobs:
         path: wheelhouse/xeus_python-*.whl
         if-no-files-found: error
 
-  linux:
-    runs-on: ubuntu-latest
+  # linux:
+  #   runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
-    container:
-        image: "quay.io/pypa/manylinux_2_24_x86_64"
+  #   container:
+  #       image: "quay.io/pypa/manylinux_2_24_x86_64"
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
 
-    - name: Build wheel
-      run: |
-        set -eux
-        pyver=`echo '${{ matrix.PYTHON_VERSION }}' | tr -d '.'`
-        pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
-        export PATH=$pypath:$PATH
-        python -m pip wheel --verbose . -w wheelhouse_dirty
-        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_24_x86_64 -w wheelhouse
+  #   - name: Build wheel
+  #     run: |
+  #       set -eux
+  #       pyver=`echo '${{ matrix.PYTHON_VERSION }}' | tr -d '.'`
+  #       pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
+  #       export PATH=$pypath:$PATH
+  #       python -m pip wheel --verbose . -w wheelhouse_dirty
+  #       auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_24_x86_64 -w wheelhouse
 
-    - name: List wheels
-      run: ls wheelhouse
+  #   - name: List wheels
+  #     run: ls wheelhouse
 
-    - name: Get wheel name
-      run: echo "WHEEL=$(find wheelhouse -type f -iname 'xeus_python-*.whl')" >> $GITHUB_ENV
+  #   - name: Get wheel name
+  #     run: echo "WHEEL=$(find wheelhouse -type f -iname 'xeus_python-*.whl')" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3
-      with:
-        name: wheelhouse
-        path: ${{ env.WHEEL }}
+  #   - uses: actions/upload-artifact@v3
+  #     with:
+  #       name: wheelhouse
+  #       path: ${{ env.WHEEL }}
 
-  windows:
-    runs-on: windows-2019
+  # windows:
+  #   runs-on: windows-2019
 
-    strategy:
-      fail-fast: false
-      matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
 
-    - name: Install Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.PYTHON_VERSION }}
+  #   - name: Install Python
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: ${{ matrix.PYTHON_VERSION }}
 
-    - name: Setup NASM
-      uses: ilammy/setup-nasm@v1
+  #   - name: Setup NASM
+  #     uses: ilammy/setup-nasm@v1
 
-    - name: Build wheel
-      shell: cmd
-      run: |
-        call "c:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-        pip wheel --verbose . -w wheelhouse
+  #   - name: Build wheel
+  #     shell: cmd
+  #     run: |
+  #       call "c:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #       pip wheel --verbose . -w wheelhouse
 
-    - name: List wheels
-      run: ls wheelhouse
+  #   - name: List wheels
+  #     run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v3
-      with:
-        name: wheelhouse
-        path: wheelhouse/xeus_python-*.whl
-        if-no-files-found: error
+  #   - uses: actions/upload-artifact@v3
+  #     with:
+  #       name: wheelhouse
+  #       path: wheelhouse/xeus_python-*.whl
+  #       if-no-files-found: error
 
-  test-wheels:
-    runs-on: ${{ matrix.os }}-latest
-    needs: [linux, osx, windows]
+  # test-wheels:
+  #   runs-on: ${{ matrix.os }}-latest
+  #   needs: [linux, osx, windows]
 
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu, macos, windows]
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-        include:
-          - PYTHON_VERSION: "3.7"
-            os: ubuntu
-            whl: 'xeus_python-*-cp37*linux*.whl'
-          - PYTHON_VERSION: "3.8"
-            os: ubuntu
-            whl: 'xeus_python-*-cp38*linux*.whl'
-          - PYTHON_VERSION: "3.9"
-            os: ubuntu
-            whl: 'xeus_python-*-cp39*linux*.whl'
-          - PYTHON_VERSION: "3.10"
-            os: ubuntu
-            whl: 'xeus_python-*-cp310*linux*.whl'
-          - PYTHON_VERSION: "3.11"
-            os: ubuntu
-            whl: 'xeus_python-*-cp311*linux*.whl'
-          - PYTHON_VERSION: "3.7"
-            os: macos
-            whl: 'xeus_python-*-cp37*macos*x86_64.whl'
-          - PYTHON_VERSION: "3.8"
-            os: macos
-            whl: 'xeus_python-*-cp38*macos*x86_64.whl'
-          - PYTHON_VERSION: "3.9"
-            os: macos
-            whl: 'xeus_python-*-cp39*macos*x86_64.whl'
-          - PYTHON_VERSION: "3.10"
-            os: macos
-            whl: 'xeus_python-*-cp310*macos*x86_64.whl'
-          - PYTHON_VERSION: "3.11"
-            os: macos
-            whl: 'xeus_python-*-cp311*macos*x86_64.whl'
-          - PYTHON_VERSION: "3.7"
-            os: windows
-            whl: 'xeus_python-*-cp37*win*.whl'
-          - PYTHON_VERSION: "3.8"
-            os: windows
-            whl: 'xeus_python-*-cp38*win*.whl'
-          - PYTHON_VERSION: "3.9"
-            os: windows
-            whl: 'xeus_python-*-cp39*win*.whl'
-          - PYTHON_VERSION: "3.10"
-            os: windows
-            whl: 'xeus_python-*-cp310*win*.whl'
-          - PYTHON_VERSION: "3.11"
-            os: windows
-            whl: 'xeus_python-*-cp311*win*.whl'
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ubuntu, macos, windows]
+  #       PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+  #       include:
+  #         - PYTHON_VERSION: "3.7"
+  #           os: ubuntu
+  #           whl: 'xeus_python-*-cp37*linux*.whl'
+  #         - PYTHON_VERSION: "3.8"
+  #           os: ubuntu
+  #           whl: 'xeus_python-*-cp38*linux*.whl'
+  #         - PYTHON_VERSION: "3.9"
+  #           os: ubuntu
+  #           whl: 'xeus_python-*-cp39*linux*.whl'
+  #         - PYTHON_VERSION: "3.10"
+  #           os: ubuntu
+  #           whl: 'xeus_python-*-cp310*linux*.whl'
+  #         - PYTHON_VERSION: "3.11"
+  #           os: ubuntu
+  #           whl: 'xeus_python-*-cp311*linux*.whl'
+  #         - PYTHON_VERSION: "3.7"
+  #           os: macos
+  #           whl: 'xeus_python-*-cp37*macos*x86_64.whl'
+  #         - PYTHON_VERSION: "3.8"
+  #           os: macos
+  #           whl: 'xeus_python-*-cp38*macos*x86_64.whl'
+  #         - PYTHON_VERSION: "3.9"
+  #           os: macos
+  #           whl: 'xeus_python-*-cp39*macos*x86_64.whl'
+  #         - PYTHON_VERSION: "3.10"
+  #           os: macos
+  #           whl: 'xeus_python-*-cp310*macos*x86_64.whl'
+  #         - PYTHON_VERSION: "3.11"
+  #           os: macos
+  #           whl: 'xeus_python-*-cp311*macos*x86_64.whl'
+  #         - PYTHON_VERSION: "3.7"
+  #           os: windows
+  #           whl: 'xeus_python-*-cp37*win*.whl'
+  #         - PYTHON_VERSION: "3.8"
+  #           os: windows
+  #           whl: 'xeus_python-*-cp38*win*.whl'
+  #         - PYTHON_VERSION: "3.9"
+  #           os: windows
+  #           whl: 'xeus_python-*-cp39*win*.whl'
+  #         - PYTHON_VERSION: "3.10"
+  #           os: windows
+  #           whl: 'xeus_python-*-cp310*win*.whl'
+  #         - PYTHON_VERSION: "3.11"
+  #           os: windows
+  #           whl: 'xeus_python-*-cp311*win*.whl'
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+    # steps:
+    # - name: Checkout
+    #   uses: actions/checkout@v3
 
-    - uses: actions/download-artifact@v3
-      with:
-        name: wheelhouse
-        path: ./wheelhouse
+    # - uses: actions/download-artifact@v3
+    #   with:
+    #     name: wheelhouse
+    #     path: ./wheelhouse
 
-    - name: Install Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.PYTHON_VERSION }}
+    # - name: Install Python
+    #   uses: actions/setup-python@v4
+    #   with:
+    #     python-version: ${{ matrix.PYTHON_VERSION }}
 
-    - name: Install deps
-      run: python -m pip install pytest nbval
+    # - name: Install deps
+    #   run: python -m pip install pytest nbval
 
-    - name: List wheels
-      run: ls wheelhouse
+    # - name: List wheels
+    #   run: ls wheelhouse
 
-    - name: Install wheel
-      shell: bash
-      run: |
-        WHEEL=$(find . -type f -iname ${{ matrix.whl }})
-        python -m pip install -vv ${WHEEL}
-      working-directory: wheelhouse
+    # - name: Install wheel
+    #   shell: bash
+    #   run: |
+    #     WHEEL=$(find . -type f -iname ${{ matrix.whl }})
+    #     python -m pip install -vv ${WHEEL}
+    #   working-directory: wheelhouse
 
-    - name: Run test
-      run: pytest test -vv
+    # - name: Run test
+    #   run: pytest test -vv
 
   publish-wheels:
     runs-on: ubuntu-latest
