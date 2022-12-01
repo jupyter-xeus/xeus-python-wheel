@@ -48,7 +48,7 @@ jobs:
         if [ ${{ matrix.ARCH }} == "arm64" ]; then
           export _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
           export ARCHFLAGS="-arch arm64"
-          export CONFIG="osx_arm64_"  # fo libsodium
+          export LIBSODIUM_HOST="--host=arm64-apple-darwin"
           export OPENSSL_CONFIG_COMMAND="perl Configure darwin64-arm64-cc"
           export DCMAKE_OSX_ARCHITECTURES="arm64"
         fi
