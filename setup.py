@@ -1,3 +1,4 @@
+import os
 import sys
 
 try:
@@ -60,6 +61,9 @@ def cmake_process_manifest_hook(cmake_manifest):
     return cmake_manifest
 
 
+openssl_config = os.environ.get('OPENSSL_CONFIG_COMMAND', './config')
+libsodium_config = os.environ.get('LIBSODIUM_CONFIG_COMMAND', './configure')
+
 setup(
     name="xeus-python",
     version=xeus_version,
@@ -73,6 +77,7 @@ setup(
         'xeus-python-shell[ipython]>=0.5,<0.6'
     ],
     setup_requires=setup_requires,
-    cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path],
+    cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path, f'-DOPENSSL_CONFIG:INTERNAL={openssl_config}',
+         f'-DLIBSODIUM_CONFIG:INTERNAL="{libsodium_config}"'],
     cmake_process_manifest_hook=cmake_process_manifest_hook
 )
