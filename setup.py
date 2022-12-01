@@ -62,7 +62,7 @@ def cmake_process_manifest_hook(cmake_manifest):
 
 
 openssl_config = os.environ.get('OPENSSL_CONFIG_COMMAND', './config')
-libsodium_host = os.environ.get('LIBSODIUM_HOST', '')
+libsodium_config = os.environ.get('LIBSODIUM_CONFIG_COMMAND', './configure')
 
 setup(
     name="xeus-python",
@@ -78,6 +78,6 @@ setup(
     ],
     setup_requires=setup_requires,
     cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path, f'-DOPENSSL_CONFIG:INTERNAL={openssl_config}',
-         f'-DLIBSODIUM_HOST:INTERNAL={libsodium_host}'],
+         f'-DLIBSODIUM_CONFIG:INTERNAL="{libsodium_config}"'],
     cmake_process_manifest_hook=cmake_process_manifest_hook
 )

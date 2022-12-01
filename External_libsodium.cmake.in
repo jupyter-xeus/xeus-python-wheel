@@ -19,7 +19,7 @@ endif()
 
 if (WIN32)
 else ()
-    set(LIBSODIUM_CONFIG_COMMAND CFLAGS=-fPIC ./configure %LIBSODIUM_HOST% --prefix=${EP_INSTALL_DIR})
+    set(LIBSODIUM_CONFIG_COMMAND CFLAGS=-fPIC @LIBSODIUM_CONFIG@ --prefix=${EP_INSTALL_DIR})
     set(LIBSODIUM_BUILD_COMMAND make -j ${CPU_COUNT})
     set(LIBSODIUM_INSTALL_COMMAND make install)
 endif ()
