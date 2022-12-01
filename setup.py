@@ -78,6 +78,6 @@ setup(
     ],
     setup_requires=setup_requires,
     cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path, f'-DOPENSSL_CONFIG:INTERNAL={openssl_config}',
-         f'-DLIBSODIUM_HOST:INTERNAL={libsodium_host}']
+         f'-DLIBSODIUM_HOST:INTERNAL={libsodium_host}'],
     cmake_process_manifest_hook=cmake_process_manifest_hook
 )
