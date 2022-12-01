@@ -48,6 +48,7 @@ jobs:
         if [ ${{ matrix.ARCH }} == "arm64" ]; then
           export _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
           export ARCHFLAGS="-arch arm64"
+          export DCMAKE_OSX_ARCHITECTURES="arm64"
         fi
         python -m pip wheel . --verbose -w wheelhouse_dirty
         delocate-wheel -w wheelhouse --require-archs=${{ matrix.arch }} -v wheelhouse_dirty/xeus_python-*.whl
