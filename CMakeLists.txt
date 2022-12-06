@@ -182,8 +182,8 @@ set(XEUS_BUILD_STATIC_LIBS ON CACHE BOOL "Build xeus static library" FORCE)
 
 FetchContent_Declare(
   xeus
-  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus
-  GIT_TAG ${XEUS_GIT_TAG}
+  GIT_REPOSITORY https://github.com/JohanMabille/xeus
+  GIT_TAG f1e82341a34ecfa2eea2bf10c1b88deddb9c6492
 )
 
 FetchContent_GetProperties(xeus)
