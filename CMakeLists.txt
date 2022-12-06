@@ -27,10 +27,11 @@ set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        v4.7.1)
 set(XTL_GIT_TAG           0.7.2)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          2.4.1)
+set(XEUS_GIT_TAG          3.0.3)
+set(XEUS_ZMQ_GIT_TAG      1.0.2)
 set(PYBIND11_GIT_TAG      v2.10.0)
 set(PYBIND11_JSON_GIT_TAG 0.2.11)
-set(XEUS_PYTHON_GIT_TAG   0.14.3)
+set(XEUS_PYTHON_GIT_TAG   0.15.0)
 
 # pre-build non-cmake dependencies
 # ================================
@@ -81,6 +82,7 @@ endif()
 # ==================================
 
 include(FetchContent)
+
 
 # LibZMQ
 # ------
@@ -170,12 +172,12 @@ if(NOT xtl_POPULATED)
   add_subdirectory(${xtl_SOURCE_DIR} ${xtl_BINARY_DIR})
 endif()
 
+
 # Xeus
 # ----
 
 message(STATUS "Fetching xeus")
 
-set(XEUS_DISABLE_ARCH_NATIVE ON CACHE BOOL "remove -march=native flag" FORCE)
 set(XEUS_STATIC_DEPENDENCIES ON CACHE BOOL "links with static libraries" FORCE)
 set(XEUS_BUILD_SHARED_LIBS OFF CACHE BOOL "Do not build xeus shared object" FORCE)
 set(XEUS_BUILD_STATIC_LIBS ON CACHE BOOL "Build xeus static library" FORCE)
@@ -191,6 +193,29 @@ FetchContent_GetProperties(xeus)
 if(NOT xeus_POPULATED)
   FetchContent_Populate(xeus)
   add_subdirectory(${xeus_SOURCE_DIR} ${xeus_BINARY_DIR})
+endif()
+
+
+# Xeus Zmq
+# --------
+
+message(STATUS "Fetching xeus zmq")
+
+set(XEUS_ZMQ_STATIC_DEPENDENCIES ON CACHE BOOL "links with static libraries" FORCE)
+set(XEUS_ZMQ_BUILD_SHARED_LIBS OFF CACHE BOOL "Do not build xeus shared object" FORCE)
+set(XEUS_ZMQ_BUILD_STATIC_LIBS ON CACHE BOOL "Build xeus static library" FORCE)
+
+FetchContent_Declare(
+  xeus_zmq
+  GIT_REPOSITORY https://github.com/jupyter-xeus/xeus-zmq
+  GIT_TAG ${XEUS_ZMQ_GIT_TAG}
+)
+
+FetchContent_GetProperties(xeus_zmq)
+
+if(NOT xeus_zmq_POPULATED)
+  FetchContent_Populate(xeus_zmq)
+  add_subdirectory(${xeus_zmq_SOURCE_DIR} ${xeus_zmq_BINARY_DIR})
 endif()
 
 # Pybind11
