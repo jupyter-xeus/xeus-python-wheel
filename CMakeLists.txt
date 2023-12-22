@@ -31,7 +31,7 @@ set(XEUS_GIT_TAG          3.0.3)
 set(XEUS_ZMQ_GIT_TAG      1.0.2)
 set(PYBIND11_GIT_TAG      v2.10.0)
 set(PYBIND11_JSON_GIT_TAG 0.2.11)
-set(XEUS_PYTHON_GIT_TAG   0.15.11)
+set(XEUS_PYTHON_GIT_TAG   0.15.12)
 
 # pre-build non-cmake dependencies
 # ================================
