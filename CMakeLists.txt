@@ -51,6 +51,9 @@ if(result)
     message(FATAL_ERROR "CMake step for OpenSSL failed: ${result}")
 endif()
 
+# This makes sure that find_package(OpenSSL) finds the version we built
+set(OPENSSL_ROOT_DIR "${CMAKE_INSTALL_PREFIX}")
+
 if(UNIX AND NOT APPLE)
   configure_file(External_libuuid.cmake.in libuuid-download/CMakeLists.txt @ONLY)
   execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
