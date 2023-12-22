@@ -23,15 +23,15 @@ message(STATUS "LIBSODIUM CONFIG is ${LIBSODIUM_CONFIG}")
 # Dependencies
 # ============
 
-set(ZEROMQ_GIT_TAG        v4.3.2)
-set(CPPZMQ_GIT_TAG        v4.7.1)
-set(XTL_GIT_TAG           0.7.2)
-set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          3.0.3)
-set(XEUS_ZMQ_GIT_TAG      1.0.2)
-set(PYBIND11_GIT_TAG      v2.10.0)
-set(PYBIND11_JSON_GIT_TAG 0.2.11)
-set(XEUS_PYTHON_GIT_TAG   0.15.11)
+set(ZEROMQ_GIT_TAG        v4.3.5)
+set(CPPZMQ_GIT_TAG        v4.10.0)
+set(XTL_GIT_TAG           0.7.6)
+set(JSON_GIT_TAG          v3.11.3)
+set(XEUS_GIT_TAG          3.1.4)
+set(XEUS_ZMQ_GIT_TAG      1.1.1)
+set(PYBIND11_GIT_TAG      v2.11.1)
+set(PYBIND11_JSON_GIT_TAG 0.2.13)
+set(XEUS_PYTHON_GIT_TAG   0.15.12)
 
 # pre-build non-cmake dependencies
 # ================================
