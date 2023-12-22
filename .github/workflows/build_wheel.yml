@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
         ARCH: ["x86_64", "arm64"]
 
     env:
@@ -70,7 +70,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
 
     container:
         image: "quay.io/pypa/manylinux2014_x86_64"
@@ -105,7 +105,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - name: Checkout
@@ -142,7 +142,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
         include:
           - PYTHON_VERSION: "3.7"
             os: ubuntu
@@ -159,6 +159,9 @@ jobs:
           - PYTHON_VERSION: "3.11"
             os: ubuntu
             whl: 'xeus_python-*-cp311*linux*.whl'
+          - PYTHON_VERSION: "3.12"
+            os: ubuntu
+            whl: 'xeus_python-*-cp312*linux*.whl'
           - PYTHON_VERSION: "3.7"
             os: macos
             whl: 'xeus_python-*-cp37*macos*x86_64.whl'
@@ -174,6 +177,9 @@ jobs:
           - PYTHON_VERSION: "3.11"
             os: macos
             whl: 'xeus_python-*-cp311*macos*x86_64.whl'
+          - PYTHON_VERSION: "3.12"
+            os: macos
+            whl: 'xeus_python-*-cp312*macos*x86_64.whl'
           - PYTHON_VERSION: "3.7"
             os: windows
             whl: 'xeus_python-*-cp37*win*.whl'
@@ -189,6 +195,9 @@ jobs:
           - PYTHON_VERSION: "3.11"
             os: windows
             whl: 'xeus_python-*-cp311*win*.whl'
+          - PYTHON_VERSION: "3.12"
+            os: windows
+            whl: 'xeus_python-*-cp312*win*.whl'
 
     steps:
     - name: Checkout
