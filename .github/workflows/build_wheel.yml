@@ -73,7 +73,7 @@ jobs:
         PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
     container:
-        image: "quay.io/pypa/manylinux_2_24_x86_64"
+        image: "quay.io/pypa/manylinux2014_x86_64"
 
     steps:
     - name: Checkout
@@ -86,7 +86,7 @@ jobs:
         pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
         export PATH=$pypath:$PATH
         python -m pip wheel --verbose . -w wheelhouse_dirty
-        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_24_x86_64 -w wheelhouse
+        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux2014_x86_64 -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
