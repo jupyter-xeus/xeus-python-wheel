@@ -69,7 +69,7 @@ setup(
     version=xeus_version,
     description='A wheel for xeus-python',
     author='Sylvain Corlay, Johan Mabille, Martin Renou',
-    license='',
+    license='BSD-3-Clause',
     packages=['xpython'],
     py_modules=['xpython_launcher'],
     install_requires=[
