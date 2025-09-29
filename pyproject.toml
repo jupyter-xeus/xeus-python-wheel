@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-  "setuptools",
+  "setuptools~=69.0",
   "wheel",
   "scikit-build>=0.11.0,<0.14",
   "cmake>=3.4",
