@@ -60,7 +60,7 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: wheelhouse-macos-${{ matrix.PYTHON_VERSION }}-${{ strategy.job-index }}
+        name: wheelhouse-macos-${{ matrix.PYTHON_VERSION }}-${{ matrix.ARCH }}
         path: wheelhouse/xeus_python-*.whl
         if-no-files-found: error
 
@@ -93,7 +93,7 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: wheelhouse-linux-${{ matrix.PYTHON_VERSION }}-${{ strategy.job-index }}
+        name: wheelhouse-linux-${{ matrix.PYTHON_VERSION }}
         path: ${{ env.WHEEL }}
 
   windows:
@@ -127,7 +127,7 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: wheelhouse-win-${{ matrix.PYTHON_VERSION }}-${{ strategy.job-index }}
+        name: wheelhouse-win-${{ matrix.PYTHON_VERSION }}
         path: wheelhouse/xeus_python-*.whl
         if-no-files-found: error
 
