@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
         ARCH: ["x86_64", "arm64"]
 
     env:
@@ -70,7 +70,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     container:
         image: "quay.io/pypa/manylinux2014_x86_64"
@@ -105,7 +105,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - name: Checkout
@@ -142,14 +142,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
         include:
-          - PYTHON_VERSION: "3.7"
-            os: ubuntu
-            whl: 'xeus_python-*-cp37*linux*.whl'
-          - PYTHON_VERSION: "3.8"
-            os: ubuntu
-            whl: 'xeus_python-*-cp38*linux*.whl'
           - PYTHON_VERSION: "3.9"
             os: ubuntu
             whl: 'xeus_python-*-cp39*linux*.whl'
@@ -162,12 +156,9 @@ jobs:
           - PYTHON_VERSION: "3.12"
             os: ubuntu
             whl: 'xeus_python-*-cp312*linux*.whl'
-          - PYTHON_VERSION: "3.7"
-            os: macos
-            whl: 'xeus_python-*-cp37*macos*x86_64.whl'
-          - PYTHON_VERSION: "3.8"
-            os: macos
-            whl: 'xeus_python-*-cp38*macos*x86_64.whl'
+          - PYTHON_VERSION: "3.13"
+            os: ubuntu
+            whl: 'xeus_python-*-cp313*linux*.whl'
           - PYTHON_VERSION: "3.9"
             os: macos
             whl: 'xeus_python-*-cp39*macos*x86_64.whl'
@@ -180,12 +171,9 @@ jobs:
           - PYTHON_VERSION: "3.12"
             os: macos
             whl: 'xeus_python-*-cp312*macos*x86_64.whl'
-          - PYTHON_VERSION: "3.7"
-            os: windows
-            whl: 'xeus_python-*-cp37*win*.whl'
-          - PYTHON_VERSION: "3.8"
-            os: windows
-            whl: 'xeus_python-*-cp38*win*.whl'
+          - PYTHON_VERSION: "3.13"
+            os: macos
+            whl: 'xeus_python-*-cp313*macos*x86_64.whl'
           - PYTHON_VERSION: "3.9"
             os: windows
             whl: 'xeus_python-*-cp39*win*.whl'
@@ -198,6 +186,9 @@ jobs:
           - PYTHON_VERSION: "3.12"
             os: windows
             whl: 'xeus_python-*-cp312*win*.whl'
+          - PYTHON_VERSION: "3.13"
+            os: windows
+            whl: 'xeus_python-*-cp313*win*.whl'
 
     steps:
     - name: Checkout
