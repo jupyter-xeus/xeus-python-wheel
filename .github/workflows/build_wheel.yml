@@ -28,7 +28,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install Python
       uses: actions/setup-python@v4
@@ -58,7 +58,7 @@ jobs:
     - name: List wheels
       run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: wheelhouse
         path: wheelhouse/xeus_python-*.whl
@@ -77,7 +77,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Build wheel
       run: |
@@ -94,7 +94,7 @@ jobs:
     - name: Get wheel name
       run: echo "WHEEL=$(find wheelhouse -type f -iname 'xeus_python-*.whl')" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: wheelhouse
         path: ${{ env.WHEEL }}
@@ -109,7 +109,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install Python
       uses: actions/setup-python@v4
@@ -128,7 +128,7 @@ jobs:
     - name: List wheels
       run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: wheelhouse
         path: wheelhouse/xeus_python-*.whl
@@ -192,9 +192,9 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
         name: wheelhouse
         path: ./wheelhouse
@@ -230,7 +230,7 @@ jobs:
 
     steps:
 
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
         name: wheelhouse
         path: ./wheelhouse
