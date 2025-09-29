@@ -12,14 +12,14 @@ on:
         - '*'
 
 jobs:
-  osx-arm:
-    runs-on: macos-15
-
+  osx:
     strategy:
       fail-fast: false
       matrix:
         PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-        ARCH: ["arm64"]
+        os: [macos-15, macos-15-intel]
+
+    runs-on: ${{ matrix.os }}
 
     env:
       PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
@@ -29,6 +29,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Set ARCH env var
+      run: echo "ARCH=$(if [ $(uname -p) == 'arm' ]; then echo arm64; else echo x86_64; fi)" >> $GITHUB_ENV
 
     - name: Install Python
       uses: actions/setup-python@v4
@@ -43,67 +46,25 @@ jobs:
     - name: Build wheel
       run: |
         set -eux
+        ARCH=$(if [ $(uname -p) == 'arm' ]; then echo arm64; else echo x86_64; fi)
         pip install delocate
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
-        export _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
-        export ARCHFLAGS="-arch arm64"
-        export LIBSODIUM_CONFIG_COMMAND="./configure --host=arm64-apple-darwin"
-        export OPENSSL_CONFIG_COMMAND="perl Configure darwin64-arm64-cc"
-        export DCMAKE_OSX_ARCHITECTURES="arm64"
+        if [ $ARCH == "arm64" ]; then
+          export _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
+          export ARCHFLAGS="-arch arm64"
+          export LIBSODIUM_CONFIG_COMMAND="./configure --host=arm64-apple-darwin"
+          export OPENSSL_CONFIG_COMMAND="perl Configure darwin64-arm64-cc"
+          export DCMAKE_OSX_ARCHITECTURES="arm64"
+        fi
         python -m pip wheel . --verbose -w wheelhouse_dirty
-        delocate-wheel -w wheelhouse --require-archs=${{ matrix.ARCH }} -v wheelhouse_dirty/xeus_python-*.whl
+        delocate-wheel -w wheelhouse --require-archs=$ARCH -v wheelhouse_dirty/xeus_python-*.whl
 
     - name: List wheels
       run: ls wheelhouse
 
     - uses: actions/upload-artifact@v4
       with:
-        name: wheelhouse-macos-${{ matrix.PYTHON_VERSION }}-${{ matrix.ARCH }}
-        path: wheelhouse/xeus_python-*.whl
-        if-no-files-found: error
-
-  osx-intel:
-    runs-on: macos-15-intel
-
-    strategy:
-      fail-fast: false
-      matrix:
-        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-        ARCH: ["x86_64"]
-
-    env:
-      PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
-      CXX: clang++
-      CC: clang
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Install Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.PYTHON_VERSION }}
-
-    - name: Setup xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '16.4.0'
-
-    - name: Build wheel
-      run: |
-        set -eux
-        pip install delocate
-        export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
-        python -m pip wheel . --verbose -w wheelhouse_dirty
-        delocate-wheel -w wheelhouse --require-archs=${{ matrix.ARCH }} -v wheelhouse_dirty/xeus_python-*.whl
-
-    - name: List wheels
-      run: ls wheelhouse
-
-    - uses: actions/upload-artifact@v4
-      with:
-        name: wheelhouse-macos-${{ matrix.PYTHON_VERSION }}-${{ matrix.ARCH }}
+        name: wheelhouse-${{ matrix.os }}-${{ matrix.PYTHON_VERSION }}
         path: wheelhouse/xeus_python-*.whl
         if-no-files-found: error
 
