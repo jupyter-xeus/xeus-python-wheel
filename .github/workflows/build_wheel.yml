@@ -82,10 +82,8 @@ jobs:
     - name: Build wheel
       run: |
         set -eux
-        pyver=`echo '${{ matrix.PYTHON_VERSION }}' | tr -d '.'`
-        pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
-        export PATH=$pypath:$PATH
-        python -m pip wheel --verbose . -w wheelhouse_dirty
+        ls /opt/python
+        python${{ matrix.PYTHON_VERSION }} -m pip wheel --verbose . -w wheelhouse_dirty
         auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux2014_x86_64 -w wheelhouse
 
     - name: List wheels
