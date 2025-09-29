@@ -82,9 +82,8 @@ jobs:
     - name: Build wheel
       run: |
         set -eux
-        ls /opt/python
         python${{ matrix.PYTHON_VERSION }} -m pip wheel --verbose . -w wheelhouse_dirty
-        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux2014_x86_64 -w wheelhouse
+        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_28_x86_64 -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
