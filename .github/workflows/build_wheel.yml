@@ -66,12 +66,13 @@ jobs:
         if-no-files-found: error
 
   linux:
-    runs-on: ubuntu-22.04
-
     strategy:
       fail-fast: false
       matrix:
         PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: [ubuntu-24.04]
+
+    runs-on: ${{ matrix.os }}
 
     container:
         image: "quay.io/pypa/manylinux_2_28_x86_64"
@@ -93,16 +94,17 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: wheelhouse-linux-${{ matrix.PYTHON_VERSION }}
+        name: wheelhouse-${{ matrix.os }}-${{ matrix.PYTHON_VERSION }}
         path: ${{ env.WHEEL }}
 
   windows:
-    runs-on: windows-2025
-
     strategy:
       fail-fast: false
       matrix:
         PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: [windows-2025]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout
@@ -127,7 +129,7 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: wheelhouse-win-${{ matrix.PYTHON_VERSION }}
+        name: wheelhouse-${{ matrix.os }}-${{ matrix.PYTHON_VERSION }}
         path: wheelhouse/xeus_python-*.whl
         if-no-files-found: error
 
