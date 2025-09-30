@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4.0)
+cmake_minimum_required(VERSION 3.5.0)
 
 project(wheel)
 set(WHEEL_VERSION 0.1.0)
@@ -25,13 +25,13 @@ message(STATUS "LIBSODIUM CONFIG is ${LIBSODIUM_CONFIG}")
 
 set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        v4.7.1)
-set(XTL_GIT_TAG           0.7.2)
+set(XTL_GIT_TAG           0.8.0)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          3.0.3)
-set(XEUS_ZMQ_GIT_TAG      1.0.2)
-set(PYBIND11_GIT_TAG      v2.10.0)
-set(PYBIND11_JSON_GIT_TAG 0.2.11)
-set(XEUS_PYTHON_GIT_TAG   0.15.12)
+set(XEUS_GIT_TAG          5.2.4)
+set(XEUS_ZMQ_GIT_TAG      3.1.1)
+set(PYBIND11_GIT_TAG      v3.0.1)
+set(PYBIND11_JSON_GIT_TAG 0.2.15)
+set(XEUS_PYTHON_GIT_TAG   0.17.6)
 
 # pre-build non-cmake dependencies
 # ================================
