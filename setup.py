@@ -74,7 +74,7 @@ setup(
     py_modules=['xpython_launcher'],
     install_requires=[
         'pygments>=2.3.1,<3',
-        'xeus-python-shell[ipython]>=0.5,<0.6'
+        'xeus-python-shell[ipython]>=0.6,<0.7'
     ],
     setup_requires=setup_requires,
     cmake_args=['-DCMAKE_INSTALL_LIBDIR=lib', '-DPYTHON_EXECUTABLE:FILEPATH=' + python_path, f'-DOPENSSL_CONFIG:INTERNAL={openssl_config}',
