@@ -25,7 +25,7 @@ message(STATUS "LIBSODIUM CONFIG is ${LIBSODIUM_CONFIG}")
 
 set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        v4.7.1)
-set(XTL_GIT_TAG           0.7.2)
+set(XTL_GIT_TAG           0.8.0)
 set(JSON_GIT_TAG          v3.7.3)
 set(XEUS_GIT_TAG          5.2.4)
 set(XEUS_ZMQ_GIT_TAG      3.1.1)
