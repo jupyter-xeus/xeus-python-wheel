@@ -13,13 +13,13 @@ on:
 
 jobs:
   osx:
-    runs-on: macos-11
-
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
-        ARCH: ["x86_64", "arm64"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: [macos-15, macos-15-intel]
+
+    runs-on: ${{ matrix.os }}
 
     env:
       PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
@@ -28,7 +28,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install Python
       uses: actions/setup-python@v4
@@ -38,14 +38,15 @@ jobs:
     - name: Setup xcode
       uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '13.1.0'
+        xcode-version: '16.4.0'
 
     - name: Build wheel
       run: |
         set -eux
+        ARCH=$(if [ $(uname -p) == 'arm' ]; then echo arm64; else echo x86_64; fi)
         pip install delocate
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
-        if [ ${{ matrix.ARCH }} == "arm64" ]; then
+        if [ $ARCH == "arm64" ]; then
           export _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
           export ARCHFLAGS="-arch arm64"
           export LIBSODIUM_CONFIG_COMMAND="./configure --host=arm64-apple-darwin"
@@ -53,40 +54,37 @@ jobs:
           export DCMAKE_OSX_ARCHITECTURES="arm64"
         fi
         python -m pip wheel . --verbose -w wheelhouse_dirty
-        delocate-wheel -w wheelhouse --require-archs=${{ matrix.arch }} -v wheelhouse_dirty/xeus_python-*.whl
+        delocate-wheel -w wheelhouse --require-archs=$ARCH -v wheelhouse_dirty/xeus_python-*.whl
 
     - name: List wheels
       run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: wheelhouse
+        name: wheelhouse-${{ matrix.os }}-${{ matrix.PYTHON_VERSION }}
         path: wheelhouse/xeus_python-*.whl
         if-no-files-found: error
 
   linux:
-    runs-on: ubuntu-20.04
-
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: [ubuntu-24.04]
+
+    runs-on: ${{ matrix.os }}
 
     container:
-        image: "quay.io/pypa/manylinux2014_x86_64"
+        image: "quay.io/pypa/manylinux_2_28_x86_64"
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Build wheel
       run: |
-        set -eux
-        pyver=`echo '${{ matrix.PYTHON_VERSION }}' | tr -d '.'`
-        pypath=`echo /opt/python/cp${pyver}-cp${pyver}*/bin`
-        export PATH=$pypath:$PATH
-        python -m pip wheel --verbose . -w wheelhouse_dirty
-        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux2014_x86_64 -w wheelhouse
+        python${{ matrix.PYTHON_VERSION }} -m pip wheel --verbose . -w wheelhouse_dirty
+        auditwheel repair wheelhouse_dirty/xeus_python-*.whl --plat manylinux_2_28_x86_64 -w wheelhouse
 
     - name: List wheels
       run: ls wheelhouse
@@ -94,22 +92,23 @@ jobs:
     - name: Get wheel name
       run: echo "WHEEL=$(find wheelhouse -type f -iname 'xeus_python-*.whl')" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: wheelhouse
+        name: wheelhouse-${{ matrix.os }}-${{ matrix.PYTHON_VERSION }}
         path: ${{ env.WHEEL }}
 
   windows:
-    runs-on: windows-2022
-
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: [windows-2025]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install Python
       uses: actions/setup-python@v4
@@ -128,9 +127,9 @@ jobs:
     - name: List wheels
       run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: wheelhouse
+        name: wheelhouse-${{ matrix.os }}-${{ matrix.PYTHON_VERSION }}
         path: wheelhouse/xeus_python-*.whl
         if-no-files-found: error
 
@@ -142,14 +141,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
         include:
-          - PYTHON_VERSION: "3.7"
-            os: ubuntu
-            whl: 'xeus_python-*-cp37*linux*.whl'
-          - PYTHON_VERSION: "3.8"
-            os: ubuntu
-            whl: 'xeus_python-*-cp38*linux*.whl'
           - PYTHON_VERSION: "3.9"
             os: ubuntu
             whl: 'xeus_python-*-cp39*linux*.whl'
@@ -162,30 +155,24 @@ jobs:
           - PYTHON_VERSION: "3.12"
             os: ubuntu
             whl: 'xeus_python-*-cp312*linux*.whl'
-          - PYTHON_VERSION: "3.7"
-            os: macos
-            whl: 'xeus_python-*-cp37*macos*x86_64.whl'
-          - PYTHON_VERSION: "3.8"
-            os: macos
-            whl: 'xeus_python-*-cp38*macos*x86_64.whl'
+          - PYTHON_VERSION: "3.13"
+            os: ubuntu
+            whl: 'xeus_python-*-cp313*linux*.whl'
           - PYTHON_VERSION: "3.9"
             os: macos
-            whl: 'xeus_python-*-cp39*macos*x86_64.whl'
+            whl: 'xeus_python-*-cp39*macos*arm64.whl'
           - PYTHON_VERSION: "3.10"
             os: macos
-            whl: 'xeus_python-*-cp310*macos*x86_64.whl'
+            whl: 'xeus_python-*-cp310*macos*arm64.whl'
           - PYTHON_VERSION: "3.11"
             os: macos
-            whl: 'xeus_python-*-cp311*macos*x86_64.whl'
+            whl: 'xeus_python-*-cp311*macos*arm64.whl'
           - PYTHON_VERSION: "3.12"
             os: macos
-            whl: 'xeus_python-*-cp312*macos*x86_64.whl'
-          - PYTHON_VERSION: "3.7"
-            os: windows
-            whl: 'xeus_python-*-cp37*win*.whl'
-          - PYTHON_VERSION: "3.8"
-            os: windows
-            whl: 'xeus_python-*-cp38*win*.whl'
+            whl: 'xeus_python-*-cp312*macos*arm64.whl'
+          - PYTHON_VERSION: "3.13"
+            os: macos
+            whl: 'xeus_python-*-cp313*macos*arm64.whl'
           - PYTHON_VERSION: "3.9"
             os: windows
             whl: 'xeus_python-*-cp39*win*.whl'
@@ -198,14 +185,18 @@ jobs:
           - PYTHON_VERSION: "3.12"
             os: windows
             whl: 'xeus_python-*-cp312*win*.whl'
+          - PYTHON_VERSION: "3.13"
+            os: windows
+            whl: 'xeus_python-*-cp313*win*.whl'
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: wheelhouse
+        pattern: wheelhouse-*
+        merge-multiple: true
         path: ./wheelhouse
 
     - name: Install Python
@@ -239,15 +230,16 @@ jobs:
 
     steps:
 
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: wheelhouse
+        pattern: wheelhouse-*
+        merge-multiple: true
         path: ./wheelhouse
 
     - name: Install Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.9
+        python-version: 3.13
 
     - name: Install deps
       run: python -m pip install twine
