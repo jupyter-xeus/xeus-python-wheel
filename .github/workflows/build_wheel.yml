@@ -59,7 +59,7 @@ jobs:
     - name: List wheels
       run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: wheelhouse-${{ matrix.os }}-${{ matrix.PYTHON_VERSION }}
         path: wheelhouse/xeus_python-*.whl
@@ -92,7 +92,7 @@ jobs:
     - name: Get wheel name
       run: echo "WHEEL=$(find wheelhouse -type f -iname 'xeus_python-*.whl')" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: wheelhouse-${{ matrix.os }}-${{ matrix.PYTHON_VERSION }}
         path: ${{ env.WHEEL }}
@@ -127,7 +127,7 @@ jobs:
     - name: List wheels
       run: ls wheelhouse
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: wheelhouse-${{ matrix.os }}-${{ matrix.PYTHON_VERSION }}
         path: wheelhouse/xeus_python-*.whl
