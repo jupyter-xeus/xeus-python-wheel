@@ -9,7 +9,8 @@ set(EP_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
 
 set(libsodium_TAG 1.0.18)
 set(libsodium_SHA256 6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1)
-set(libsodium_URL "https://download.libsodium.org/libsodium/releases/libsodium-${libsodium_TAG}.tar.gz")
+
+set(libsodium_URL "https://github.com/jedisct1/libsodium/releases/download/${libsodium_TAG}-RELEASE/libsodium-${libsodium_TAG}.tar.gz")
 
 include(ProcessorCount)
 ProcessorCount(CPU_COUNT)
