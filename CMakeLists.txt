@@ -27,11 +27,11 @@ set(ZEROMQ_GIT_TAG        v4.3.2)
 set(CPPZMQ_GIT_TAG        v4.7.1)
 set(XTL_GIT_TAG           0.8.0)
 set(JSON_GIT_TAG          v3.7.3)
-set(XEUS_GIT_TAG          5.2.4)
-set(XEUS_ZMQ_GIT_TAG      3.1.1)
+set(XEUS_GIT_TAG          6.0.5)
+set(XEUS_ZMQ_GIT_TAG      4.0.0)
 set(PYBIND11_GIT_TAG      v3.0.1)
 set(PYBIND11_JSON_GIT_TAG 0.2.15)
-set(XEUS_PYTHON_GIT_TAG   0.17.6)
+set(XEUS_PYTHON_GIT_TAG   0.19.0)
 
 # pre-build non-cmake dependencies
 # ================================
