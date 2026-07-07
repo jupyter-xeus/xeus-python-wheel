@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         os: [macos-15, macos-15-intel]
 
     runs-on: ${{ matrix.os }}
@@ -69,7 +69,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         os: [ubuntu-24.04]
 
     runs-on: ${{ matrix.os }}
@@ -101,7 +101,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         os: [windows-2025]
 
     runs-on: ${{ matrix.os }}
@@ -141,7 +141,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         include:
           - PYTHON_VERSION: "3.9"
             os: ubuntu
@@ -158,6 +158,9 @@ jobs:
           - PYTHON_VERSION: "3.13"
             os: ubuntu
             whl: 'xeus_python-*-cp313*linux*.whl'
+          - PYTHON_VERSION: "3.14"
+            os: ubuntu
+            whl: 'xeus_python-*-cp314*linux*.whl'
           - PYTHON_VERSION: "3.9"
             os: macos
             whl: 'xeus_python-*-cp39*macos*arm64.whl'
@@ -173,6 +176,9 @@ jobs:
           - PYTHON_VERSION: "3.13"
             os: macos
             whl: 'xeus_python-*-cp313*macos*arm64.whl'
+          - PYTHON_VERSION: "3.14"
+            os: macos
+            whl: 'xeus_python-*-cp314*macos*arm64.whl'
           - PYTHON_VERSION: "3.9"
             os: windows
             whl: 'xeus_python-*-cp39*win*.whl'
@@ -188,6 +194,9 @@ jobs:
           - PYTHON_VERSION: "3.13"
             os: windows
             whl: 'xeus_python-*-cp313*win*.whl'
+          - PYTHON_VERSION: "3.14"
+            os: windows
+            whl: 'xeus_python-*-cp314*win*.whl'
 
     steps:
     - name: Checkout
