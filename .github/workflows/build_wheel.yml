@@ -202,7 +202,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
 
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         pattern: wheelhouse-*
         merge-multiple: true
@@ -239,7 +239,7 @@ jobs:
 
     steps:
 
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         pattern: wheelhouse-*
         merge-multiple: true
