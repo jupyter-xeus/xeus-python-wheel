@@ -81,6 +81,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
 
+    - name: Install OpenSSL build dependencies
+      run: dnf install -y perl
+
     - name: Build wheel
       run: |
         python${{ matrix.PYTHON_VERSION }} -m pip wheel --verbose . -w wheelhouse_dirty
