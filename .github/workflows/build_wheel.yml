@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+        PYTHON_VERSION: ["3.11", "3.12", "3.13", "3.14", "3.15"]
         os: [macos-15, macos-15-intel]
 
     runs-on: ${{ matrix.os }}
@@ -69,7 +69,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+        PYTHON_VERSION: ["3.11", "3.12", "3.13", "3.14", "3.15"]
         os: [ubuntu-24.04]
 
     runs-on: ${{ matrix.os }}
@@ -101,7 +101,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+        PYTHON_VERSION: ["3.11", "3.12", "3.13", "3.14", "3.15"]
         os: [windows-2025]
 
     runs-on: ${{ matrix.os }}
@@ -141,14 +141,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+        PYTHON_VERSION: ["3.11", "3.12", "3.13", "3.14", "3.15"]
         include:
-          - PYTHON_VERSION: "3.9"
-            os: ubuntu
-            whl: 'xeus_python-*-cp39*linux*.whl'
-          - PYTHON_VERSION: "3.10"
-            os: ubuntu
-            whl: 'xeus_python-*-cp310*linux*.whl'
           - PYTHON_VERSION: "3.11"
             os: ubuntu
             whl: 'xeus_python-*-cp311*linux*.whl'
@@ -161,12 +155,9 @@ jobs:
           - PYTHON_VERSION: "3.14"
             os: ubuntu
             whl: 'xeus_python-*-cp314*linux*.whl'
-          - PYTHON_VERSION: "3.9"
-            os: macos
-            whl: 'xeus_python-*-cp39*macos*arm64.whl'
-          - PYTHON_VERSION: "3.10"
-            os: macos
-            whl: 'xeus_python-*-cp310*macos*arm64.whl'
+          - PYTHON_VERSION: "3.15"
+            os: ubuntu
+            whl: 'xeus_python-*-cp315*linux*.whl'
           - PYTHON_VERSION: "3.11"
             os: macos
             whl: 'xeus_python-*-cp311*macos*arm64.whl'
@@ -179,12 +170,9 @@ jobs:
           - PYTHON_VERSION: "3.14"
             os: macos
             whl: 'xeus_python-*-cp314*macos*arm64.whl'
-          - PYTHON_VERSION: "3.9"
-            os: windows
-            whl: 'xeus_python-*-cp39*win*.whl'
-          - PYTHON_VERSION: "3.10"
-            os: windows
-            whl: 'xeus_python-*-cp310*win*.whl'
+          - PYTHON_VERSION: "3.15"
+            os: macos
+            whl: 'xeus_python-*-cp315*macos*arm64.whl'
           - PYTHON_VERSION: "3.11"
             os: windows
             whl: 'xeus_python-*-cp311*win*.whl'
@@ -197,6 +185,9 @@ jobs:
           - PYTHON_VERSION: "3.14"
             os: windows
             whl: 'xeus_python-*-cp314*win*.whl'
+          - PYTHON_VERSION: "3.15"
+            os: windows
+            whl: 'xeus_python-*-cp315*win*.whl'
 
     steps:
     - name: Checkout
