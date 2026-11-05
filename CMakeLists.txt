@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.24.0)
 
 project(wheel)
 set(WHEEL_VERSION 0.1.0)
@@ -285,6 +285,10 @@ FetchContent_GetProperties(xeus-python)
 if(NOT xeus-python_POPULATED)
   FetchContent_Populate(xeus-python)
   add_subdirectory(${xeus-python_SOURCE_DIR} ${xeus-python_BINARY_DIR})
+endif()
+
+if(WIN32)
+    target_link_libraries(xpython_extension PRIVATE crypt32)
 endif()
 
 # Manually install xpython_extension library in the xpython directory
